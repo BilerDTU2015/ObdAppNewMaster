@@ -1,0 +1,124 @@
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+
+    android:layout_height="match_parent"
+
+    tools:context=".MainActivity"
+    android:background="@mipmap/vgb">
+
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/BluetoothButton"
+        android:src="@drawable/rsz_bluetoothcon"
+        android:layout_marginTop="33dp"
+        android:layout_marginStart="25dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="  Bluetooth"
+        android:id="@+id/textView"
+        android:textColor="#fffffcfe"
+        android:layout_below="@+id/BluetoothButton"
+        android:layout_alignStart="@+id/BluetoothButton" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton2"
+        android:src="@drawable/rsz_speed"
+        android:layout_alignTop="@+id/imageButton4"
+        android:layout_alignStart="@+id/textView5" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="  Speed"
+        android:id="@+id/textView2"
+        android:layout_below="@+id/imageButton2"
+        android:layout_alignStart="@+id/imageButton2"
+        android:textColor="#ffffffff" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton3"
+        android:src="@drawable/rsz_gasstation1"
+        android:layout_above="@+id/textView3"
+        android:layout_alignStart="@+id/textView6" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="  Fuel/El"
+        android:id="@+id/textView3"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignStart="@+id/imageButton3"
+        android:textColor="#ffffffff" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton4"
+        android:layout_marginTop="71dp"
+        android:src="@drawable/rsz_temperature_1con"
+        android:layout_below="@+id/textView"
+        android:layout_alignStart="@+id/textView" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="  Temp C´"
+        android:id="@+id/textView4"
+        android:textColor="#ffffffff"
+        android:layout_alignTop="@+id/textView2"
+        android:layout_alignStart="@+id/imageButton4" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/mapbutton"
+        android:src="@drawable/rsz_map7con"
+        android:layout_alignTop="@+id/BluetoothButton"
+        android:layout_centerHorizontal="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="  Map/Route"
+        android:id="@+id/textView5"
+        android:layout_below="@+id/mapbutton"
+        android:layout_alignStart="@+id/mapbutton"
+        android:textColor="#ffffffff" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imageButton6"
+        android:src="@drawable/rszmail"
+        android:layout_marginEnd="25dp"
+        android:layout_above="@+id/textView5"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=" Support"
+        android:id="@+id/textView6"
+        android:layout_below="@+id/imageButton6"
+        android:layout_alignStart="@+id/imageButton6"
+        android:textColor="#ffffffff" />
+
+
+</RelativeLayout>
