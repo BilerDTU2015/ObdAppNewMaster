@@ -31,6 +31,7 @@ import java.util.UUID;
 public class BluetoothActivity extends Activity implements OnClickListener {
 
     private static final int REQUEST_ENABLE_BT = 1;
+    public static boolean is_reading = false;
 
     private Button onBtn;
     private Button offBtn;
@@ -50,8 +51,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
     private InputStream is;
     private OutputStream os;
-
-
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -329,17 +329,41 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
     }
 
+//    public String readResult() throws IOException {
+//         byte[] buffer = new byte[8192];
+//        String inStr="";
+//        try {
+//
+//            int bytesRead = is.read(buffer);
+//
+//                            inStr = new String(buffer, "ASCII");
+//                            inStr=inStr.substring(0, bytesRead);
+//                            Log.i("TAG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+//
+//            //is.read(buffer);
+//            //return buffer.toString();
+//        } catch (IOException e){
+//            e.printStackTrace();
+//        }
+//        return "";
+//    }
+
     public String readResult() throws IOException {
-         byte[] buffer = new byte[8192];
-        String inStr="";
+        is_reading = true;
+        byte[] buffer = new byte[512];
+        //String inStr="";
+        String test ="";
         try {
-
-            int bytesRead = is.read(buffer);
-
-                            inStr = new String(buffer, "ASCII");
-                            inStr=inStr.substring(0, bytesRead);
-                            Log.i("TAG", "byteCount: " + bytesRead + ", inStr: " + inStr);
-
+            while(is_reading == true) {
+                int bytesRead = is.read(buffer, 0, 8);
+                //inStr = new String(buffer, "ASCII");
+                //inStr = inStr.substring(0, 10);
+                //Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+                DataHandler dataHandler = new DataHandler();
+                test = dataHandler.stateOfChargeRawToReal(buffer);
+                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", test: " + test);
+                buffer = null;
+            }
             //is.read(buffer);
             //return buffer.toString();
         } catch (IOException e){
