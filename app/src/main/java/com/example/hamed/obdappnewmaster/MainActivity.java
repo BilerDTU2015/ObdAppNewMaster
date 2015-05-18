@@ -19,8 +19,13 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         Bluebutton();
         Mapbutton ();
+        fuel_button ();
+        speed_button ();
+        support_button ();
+        temp_button ();
 
         toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
 
@@ -56,6 +61,65 @@ public class MainActivity extends ActionBarActivity {
         });
     }
 
+    public void fuel_button (){
+
+        switchact =(ImageButton)findViewById(R.id.imageButton3);
+        switchact.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent Fuelact = new Intent(view.getContext(),fuel_el.class);
+
+                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Fuelact);
+            }
+        });
+    }
+
+    public void speed_button (){
+
+        switchact =(ImageButton)findViewById(R.id.imageButton2);
+        switchact.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent Fuelact = new Intent(view.getContext(),speed.class);
+
+                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Fuelact);
+            }
+        });
+    }
+
+    public void support_button (){
+
+        switchact =(ImageButton)findViewById(R.id.imageButton6);
+        switchact.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent Fuelact = new Intent(view.getContext(),support.class);
+
+                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Fuelact);
+            }
+        });
+    }
+
+    public void temp_button (){
+
+        switchact =(ImageButton)findViewById(R.id.imageButton4);
+        switchact.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent Fuelact = new Intent(view.getContext(),temp.class);
+
+                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                startActivity(Fuelact);
+            }
+        });
+    }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

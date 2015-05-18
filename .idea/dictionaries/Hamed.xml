@@ -2,11 +2,13 @@
   <dictionary name="Hamed">
     <words>
       <w>bluebutton</w>
+      <w>fuelact</w>
       <w>hamed</w>
       <w>mapact</w>
       <w>mapbutton</w>
       <w>obdappnewmaster</w>
       <w>switchact</w>
+      <w>temperatur</w>
     </words>
   </dictionary>
 </component>
