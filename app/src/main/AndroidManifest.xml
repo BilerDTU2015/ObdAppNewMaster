@@ -78,7 +78,6 @@
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
 
-
         <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >

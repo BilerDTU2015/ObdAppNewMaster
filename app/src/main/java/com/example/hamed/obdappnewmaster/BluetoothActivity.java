@@ -382,32 +382,6 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         return "";
     }
 
-    public String readResult2() throws IOException {
-        //is_reading = true;
-        byte[] buffer = new byte[8192];
-        String inStr="";
-        String test ="";
-        DataHandler dataHandler = new DataHandler();
-        try {
-            //while(is_reading == true) {
-                int bytesRead = is.read(buffer);
-                inStr = new String(buffer, "ASCII");
-                //inStr = inStr.substring(0, 10);
-                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
-//                inStr = new String(buffer, "ASCII");
-//                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
-//                test = dataHandler.stateOfChargeRawToReal(buffer);
-//                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", test: " + test);
-//                buffer = null;
-           // }
-            //is.read(buffer);
-            //return buffer.toString();
-        } catch (IOException e){
-            e.printStackTrace();
-        }
-        return "";
-    }
-
     // Requires inputstream is has been successfully initialized
     public ArrayList<Integer> formatRawData(String data) {
 
@@ -467,10 +441,17 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        //unregisterReceiver(bReceiver);
-        if (bReceiver == null) {
-
-        }
+        unregisterReceiver(bReceiver);
     }
 
-       }
+    public void onBackPressed() {
+
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+
+        //super.onBackPressed();
+        //this.finish();
+
+            }
+    }
+
