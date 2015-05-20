@@ -55,25 +55,25 @@
         </activity>
 
         <activity
-            android:name="com.example.hamed.obdappnewmaster.fuel_el"
+            android:name=".CarPower"
             android:label="fuel_electricity"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
 
         <activity
-            android:name="com.example.hamed.obdappnewmaster.speed"
+            android:name=".Speed"
             android:label="speed_velocity"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
 
          <activity
-            android:name="com.example.hamed.obdappnewmaster.support"
+            android:name=".Support"
             android:label="supporting"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
          </activity>
 
         <activity
-            android:name="com.example.hamed.obdappnewmaster.temp"
+            android:name=".Temp"
             android:label="temperature"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>

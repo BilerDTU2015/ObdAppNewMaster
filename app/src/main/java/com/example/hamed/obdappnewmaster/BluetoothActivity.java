@@ -206,16 +206,10 @@ public class BluetoothActivity extends Activity implements OnClickListener {
                 String command04 = "atcra 412";
                 String command05 = "atS0";
                 String command06 = "atma";
-                String command07 = "atcra 374";
 
                 try {
-                    //connectToOBD("00:07:80:6E:9F:D2");
-                    //sendCommand(command07);
                     sendCommand(command06);
-                    String res = readResult();
-                    //String res2 = formatRawData(res).toString();
-                    Log.d("COMMANDIS", res);
-                    //Log.d("COMMAND", res2);
+                    readResult();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -331,10 +325,10 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     public void setUpAtCommand() {
-        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0", "atcra 412"};
+        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0"};
         byte[] buffer = new byte[128];
         try {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 5; i++) {
 
                 os.write((commands[i] + "\r").getBytes());
                 os.flush();
