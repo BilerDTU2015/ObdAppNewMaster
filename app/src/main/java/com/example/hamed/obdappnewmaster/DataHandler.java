@@ -19,11 +19,11 @@ public class DataHandler {
         String hex_values = "";
         long hex_to_long = 0;
         try {
-            hex_values = new String(obd_data, "ASCII");
-            state_of_charge_hex = hex_values.substring(3, 5);
-            hex_to_long = Long.parseLong(state_of_charge_hex, 16);
+//            hex_values = new String(obd_data, "ASCII");
+//            state_of_charge_hex = hex_values.substring(5, 7);
+//            hex_to_long = Long.parseLong(state_of_charge_hex, 16);
 
-            //hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(2,4), 16);
+            hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(5,7), 16);
 
             state_of_charge = (hex_to_long * 0.5) - 5 + "%";
         } catch (UnsupportedEncodingException e) {
@@ -42,7 +42,7 @@ public class DataHandler {
 //            ev_power_hex = hex_values.substring(3, 5);
 //            hex_to_long = Long.parseLong(ev_power_hex, 16);
 
-            hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(0,4), 16);
+            hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
             ev_power = (hex_to_long * 10) - 100000 + "W";
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
@@ -56,9 +56,9 @@ public class DataHandler {
         long hex_to_long_o = 0;
 
         try {
-            hex_to_long_v = Long.parseLong(new String(obd_data, "ASCII").substring(0,4), 16);
+            hex_to_long_v = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
             velocityAndOdometer[0] = hex_to_long_v - 65024 + "km/t";
-            hex_to_long_o = Long.parseLong(new String(obd_data, "ASCII").substring(4,10), 16);
+            hex_to_long_o = Long.parseLong(new String(obd_data, "ASCII").substring(7,13), 16);
             velocityAndOdometer[1] = hex_to_long_o + "km";
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
