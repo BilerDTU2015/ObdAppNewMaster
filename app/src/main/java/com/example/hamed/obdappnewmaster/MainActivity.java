@@ -31,6 +31,7 @@ public class MainActivity extends ActionBarActivity {
 
     }
 
+
    public void Bluebutton (){
 
        switchact =(ImageButton)findViewById(R.id.BluetoothButton);
@@ -45,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
            }
        });
    }
+
 
     public void Mapbutton (){
 

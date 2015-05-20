@@ -51,7 +51,6 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     private InputStream is;
     private OutputStream os;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -412,10 +411,17 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        //unregisterReceiver(bReceiver);
-        if (bReceiver == null) {
-
-        }
+        unregisterReceiver(bReceiver);
     }
 
-       }
+    public void onBackPressed() {
+
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+
+        //super.onBackPressed();
+        //this.finish();
+
+            }
+    }
+
