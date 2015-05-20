@@ -3,9 +3,7 @@ package com.example.hamed.obdappnewmaster;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.media.Image;
 import android.os.Bundle;
-import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -91,17 +89,17 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent = new Intent(con, MapsActivity.class);
                 break;
             case R.id.btn_fuel:
-                intent = new Intent(con, fuel_el.class);
+                intent = new Intent(con, CarPower.class);
                 break;
             case R.id.btn_support:
-                intent = new Intent(con, support.class);
+                intent = new Intent(con, Support.class);
                 break;
             case R.id.btn_temp:
-                intent = new Intent(con, temp.class);
+                intent = new Intent(con, Temp.class);
                 break;
-            case R.id.btn_load_data:
-                intent = new Intent(con, DataActivity.class);
-                break;
+            //case R.id.btn_load_data:
+               // intent = new Intent(con, DataActivity.class);
+               // break;
         }
         startActivity(intent);
     }
