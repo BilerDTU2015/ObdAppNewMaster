@@ -51,7 +51,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
     private InputStream is;
     private OutputStream os;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -353,13 +353,13 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         byte[] buffer = new byte[512];
         //String inStr="";
         String test ="";
+        DataHandler dataHandler = new DataHandler();
         try {
             while(is_reading == true) {
                 int bytesRead = is.read(buffer, 0, 8);
                 //inStr = new String(buffer, "ASCII");
                 //inStr = inStr.substring(0, 10);
                 //Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
-                DataHandler dataHandler = new DataHandler();
                 test = dataHandler.stateOfChargeRawToReal(buffer);
                 Log.i("TAGGGGG", "byteCount: " + bytesRead + ", test: " + test);
                 buffer = null;
