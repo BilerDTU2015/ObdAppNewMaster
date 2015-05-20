@@ -330,20 +330,25 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     public String readResult() throws IOException {
-         byte[] buffer = new byte[8192];
+        boolean lol = true;
+         byte[] buffer = new byte[128];
         String inStr="";
-        try {
+        while(lol=true) {
+            try {
 
-            int bytesRead = is.read(buffer);
+                int bytesRead = is.read(buffer);
 
-                            inStr = new String(buffer, "ASCII");
-                            inStr=inStr.substring(0, bytesRead);
-                            Log.i("TAG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+                inStr = new String(buffer, "ASCII");
+                inStr = inStr.substring(0, bytesRead);
+                Log.i("TAGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+                buffer = new byte[128];
+                inStr = "";
 
-            //is.read(buffer);
-            //return buffer.toString();
-        } catch (IOException e){
-            e.printStackTrace();
+                //is.read(buffer);
+                //return buffer.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }
