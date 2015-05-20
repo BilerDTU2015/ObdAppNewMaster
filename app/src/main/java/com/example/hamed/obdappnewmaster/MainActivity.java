@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
-    ImageButton switchact;
 
     private ImageButton mBtnBluetooth;
     private ImageButton mBtnMap;

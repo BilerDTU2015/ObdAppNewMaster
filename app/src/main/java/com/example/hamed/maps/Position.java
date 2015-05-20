@@ -1,5 +1,7 @@
 package com.example.hamed.maps;
 
+import android.util.Log;
+
 import com.google.android.gms.maps.model.LatLng;
 
 /**
@@ -18,6 +20,13 @@ public class Position {
     public Position(LatLng position, String speed){
         this.position = position;
         this.speed = speed;
+    }
+
+    @Override
+    public String toString(){
+        String returnValue = "position : " + position.toString() + " speed : " + speed;
+        Log.d("POSITION TO STRING", returnValue);
+        return returnValue;
     }
 
 }

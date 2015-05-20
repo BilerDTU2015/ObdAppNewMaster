@@ -89,7 +89,7 @@
         </activity>
 
         <activity
-            android:name=".DataActivity"
+            android:name="com.example.hamed.obdappnewmaster.DataActivity"
             android:label="Data"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity">
         <intent-filter>

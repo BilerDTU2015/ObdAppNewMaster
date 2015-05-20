@@ -8,9 +8,12 @@ import com.example.hamed.maps.Position;
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
@@ -34,14 +37,14 @@ public class InternalStorage {
 //        else {
 //            baseFolder = con.getFilesDir().getAbsolutePath();
 //        }
-
+        Log.d("InternalStorage", "trying to append");
 
         FileOutputStream fos;
         try {
             fos = con.openFileOutput(filename, Context.MODE_APPEND);
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(position);
+            oos.writeObject(position.toString());
             oos.close();
         } catch (FileNotFoundException e) {
             Log.d("STORAGE", "Could not open fileOutput");
@@ -53,7 +56,9 @@ public class InternalStorage {
     }
 
     // data can easily be changes to a custom class holding the data
-    public static void save(String[] data, String filename, Context con){
+    public static void save(String data, String filename, Context con) throws Exception{
+        Log.d("INTERNAL STORAGE " , data);
+
         FileOutputStream fos;
         try {
             fos = con.openFileOutput(filename, Context.MODE_PRIVATE);

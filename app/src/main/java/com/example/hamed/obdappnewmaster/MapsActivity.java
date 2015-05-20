@@ -7,6 +7,7 @@ import android.location.Location;
 import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
+import android.util.Log;
 
 import com.example.hamed.maps.LocationRecorder;
 import com.example.hamed.maps.Position;
@@ -214,7 +215,15 @@ public class MapsActivity extends FragmentActivity {
 
                         // Record location
                         Position pos = new Position(currentLocation, String.valueOf(generateRandomSpeed()));
-                        storage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                        //storage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                        //InternalStorage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                        String locationString = pos.toString();
+                        try {
+                            //InternalStorage.save(locationString, "current_recording.txt", getApplicationContext());
+                            InternalStorage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
 
                         mMap.addMarker(marker.title("It's Me!"));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,15));
