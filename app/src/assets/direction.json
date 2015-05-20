@@ -1,0 +1,167 @@
+{
+   "routes" : [
+      {
+         "bounds" : {
+            "northeast" : {
+               "lat" : 53.4378288,
+               "lng" : -6.1318892
+            },
+            "southwest" : {
+               "lat" : 53.4350447,
+               "lng" : -6.1347098
+            }
+         },
+         "copyrights" : "Map data ©2015 Google",
+         "legs" : [
+            {
+               "distance" : {
+                  "text" : "0.6 km",
+                  "value" : 650
+               },
+               "duration" : {
+                  "text" : "2 mins",
+                  "value" : 91
+               },
+               "end_address" : "Limetree Avenue, Portmarnock, Co. Dublin, Ireland",
+               "end_location" : {
+                  "lat" : 53.4378288,
+                  "lng" : -6.1347098
+               },
+               "start_address" : "Redfern Avenue, Portmarnock, Co. Dublin, Ireland",
+               "start_location" : {
+                  "lat" : 53.4350447,
+                  "lng" : -6.1345966
+               },
+               "steps" : [
+                  {
+                     "distance" : {
+                        "text" : "83 m",
+                        "value" : 83
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 10
+                     },
+                     "end_location" : {
+                        "lat" : 53.4351592,
+                        "lng" : -6.1333528
+                     },
+                     "html_instructions" : "Head \u003cb\u003eeast\u003c/b\u003e on \u003cb\u003eRedfern Ave\u003c/b\u003e toward \u003cb\u003eMartello Ct\u003c/b\u003e",
+                     "polyline" : {
+                        "points" : "_pceIfdmd@GmAOkD"
+                     },
+                     "start_location" : {
+                        "lat" : 53.4350447,
+                        "lng" : -6.1345966
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "81 m",
+                        "value" : 81
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 10
+                     },
+                     "end_location" : {
+                        "lat" : 53.43525409999999,
+                        "lng" : -6.132136099999999
+                     },
+                     "html_instructions" : "Continue onto \u003cb\u003eWendell Ave\u003c/b\u003e",
+                     "polyline" : {
+                        "points" : "wpceIl|ld@QqF"
+                     },
+                     "start_location" : {
+                        "lat" : 53.4351592,
+                        "lng" : -6.1333528
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.3 km",
+                        "value" : 263
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 26
+                     },
+                     "end_location" : {
+                        "lat" : 53.4376168,
+                        "lng" : -6.1318892
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e onto \u003cb\u003eBriar Walk\u003c/b\u003e",
+                     "maneuver" : "turn-left",
+                     "polyline" : {
+                        "points" : "iqceIztld@sCMkCCyD_@"
+                     },
+                     "start_location" : {
+                        "lat" : 53.43525409999999,
+                        "lng" : -6.132136099999999
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "0.2 km",
+                        "value" : 191
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 28
+                     },
+                     "end_location" : {
+                        "lat" : 53.4375446,
+                        "lng" : -6.134697399999999
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eleft\u003c/b\u003e onto \u003cb\u003eLimetree Ave\u003c/b\u003e",
+                     "maneuver" : "turn-left",
+                     "polyline" : {
+                        "points" : "c`deIhsld@GXEZEVAZEb@?^@XBn@XxEFdABX"
+                     },
+                     "start_location" : {
+                        "lat" : 53.4376168,
+                        "lng" : -6.1318892
+                     },
+                     "travel_mode" : "DRIVING"
+                  },
+                  {
+                     "distance" : {
+                        "text" : "32 m",
+                        "value" : 32
+                     },
+                     "duration" : {
+                        "text" : "1 min",
+                        "value" : 17
+                     },
+                     "end_location" : {
+                        "lat" : 53.4378288,
+                        "lng" : -6.1347098
+                     },
+                     "html_instructions" : "Turn \u003cb\u003eright\u003c/b\u003e to stay on \u003cb\u003eLimetree Ave\u003c/b\u003e",
+                     "maneuver" : "turn-right",
+                     "polyline" : {
+                        "points" : "s_deIzdmd@y@@"
+                     },
+                     "start_location" : {
+                        "lat" : 53.4375446,
+                        "lng" : -6.134697399999999
+                     },
+                     "travel_mode" : "DRIVING"
+                  }
+               ],
+               "via_waypoint" : []
+            }
+         ],
+         "overview_polyline" : {
+            "points" : "_pceIfdmd@WyFQqFsCMkCCyD_@Mt@Gr@EbAf@hJBXy@@"
+         },
+         "summary" : "Briar Walk and Limetree Ave",
+         "warnings" : [],
+         "waypoint_order" : []
+      }
+   ],
+   "status" : "OK"
+}
