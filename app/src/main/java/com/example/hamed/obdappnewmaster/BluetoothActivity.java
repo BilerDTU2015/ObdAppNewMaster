@@ -119,7 +119,6 @@ public class BluetoothActivity extends Activity implements OnClickListener {
             BTArrayAdapter = createAdapter(values);
             myListView.setAdapter(BTArrayAdapter);
         }
-
     }
 
  
@@ -330,7 +329,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     public String readResult() throws IOException {
-        byte[] buffer = new byte[8192];
+         byte[] buffer = new byte[8192];
         String inStr="";
         try {
 
@@ -419,7 +418,5 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         //this.finish();
 
             }
+    }
 
-
-
-       }

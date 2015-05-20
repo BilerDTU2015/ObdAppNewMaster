@@ -13,6 +13,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
@@ -171,13 +172,11 @@ public class MapsActivity extends FragmentActivity {
 
     protected void onResume() {
         super.onResume();
-        //setUpMapIfNeeded();
+        setUpMapIfNeeded();
     }
 
-    /**
-     * Sets up the map if it is possible to do so (i.e., the Google Play services APK is correctly
-     * installed) and the map has not already been instantiated.. This will ensure that we only ever
-     * call {@link #setUpMap()} once when {@link #mMap} is not null.
+
+     /* call {@link #setUpMap()} once when {@link #} is not null.
      * <p/>
      * If it isn't installed {@link SupportMapFragment} (and
      * {@link com.google.android.gms.maps.MapView MapView}) will show a prompt for the user to
@@ -217,13 +216,34 @@ public class MapsActivity extends FragmentActivity {
     }
 
     /**
-     * This is where we can add markers or lines, add listeners or move the camera. In this case, we
-     * just add a marker near Africa.
-     * <p/>
      * This should only be called once and when we are sure that {@link #mMap} is not null.
      */
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(DUBLIN).title("Marker"));
+        Location location = mMap.getMyLocation();
+        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
+        mMap.addMarker(new MarkerOptions().position(new LatLng(0, 0)).title("Marker"));
+
+        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+
+        // Place dot on current location
+        mMap.setMyLocationEnabled(true);
+
+        // Turns traffic layer on
+        mMap.setTrafficEnabled(true);
+
+        // Enables indoor maps
+        mMap.setIndoorEnabled(true);
+
+        // Turns on 3D buildings
+        mMap.setBuildingsEnabled(true);
+
+        // Show Zoom buttons
+        mMap.getUiSettings().setZoomControlsEnabled(true);
+
+        // Create a marker in the map at a given position with a title
+        Marker marker = mMap.addMarker(new MarkerOptions().
+                position(currentLocation).title("Hello i'm here"));
     }
 }
