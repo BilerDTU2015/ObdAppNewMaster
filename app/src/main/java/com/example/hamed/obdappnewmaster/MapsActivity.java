@@ -8,6 +8,9 @@ import android.os.AsyncTask;
 import android.support.v4.app.FragmentActivity;
 import android.os.Bundle;
 
+import com.example.hamed.maps.LocationRecorder;
+import com.example.hamed.maps.Position;
+import com.example.hamed.storage.InternalStorage;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -27,6 +30,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class MapsActivity extends FragmentActivity {
 
@@ -38,12 +42,14 @@ public class MapsActivity extends FragmentActivity {
     JSONArray array;
     static final LatLng DUBLIN = new LatLng(53.344103999999990000, -6.267493699999932000);
 
+    InternalStorage storage = new InternalStorage();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);
        setContentView(R.layout.activity_maps);
        setUpMapIfNeeded();
+
 
        // from tutorial
        // mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map)).getMap();
@@ -206,6 +212,10 @@ public class MapsActivity extends FragmentActivity {
                         LatLng currentLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
                         MarkerOptions marker = new MarkerOptions().position(currentLocation);
 
+                        // Record location
+                        Position pos = new Position(currentLocation, String.valueOf(generateRandomSpeed()));
+                        storage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+
                         mMap.addMarker(marker.title("It's Me!"));
                         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation,15));
                     }
@@ -245,5 +255,17 @@ public class MapsActivity extends FragmentActivity {
         // Create a marker in the map at a given position with a title
         Marker marker = mMap.addMarker(new MarkerOptions().
                 position(currentLocation).title("Hello i'm here"));
+    }
+
+    // Generates a random dummy speed value
+    private int generateRandomSpeed(){
+        int speed;
+        int min = 40;
+        int max = 60;
+
+        Random random = new Random();
+        speed = random.nextInt(max - min + 1) + min;
+
+        return speed;
     }
 }

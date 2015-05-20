@@ -29,8 +29,9 @@ public class LocationRecorder extends FragmentActivity {
     private String RECORDING_DIR = "//assets/";
     private String FILE_NAME = "current_recording.txt";
 
-    public LocationRecorder(Context context){
+    public LocationRecorder(Context context, GoogleMap map){
         this.context = context;
+        this.mMap = map;
     }
 
     // Change the recording status, returns true if status is changed, false if already recording

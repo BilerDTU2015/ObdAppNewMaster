@@ -1,19 +1,8 @@
-<<<<<<< HEAD
-=======
-
->>>>>>> ac020790de140b73a009aa940c6a8e8552d58f6d
 <fragment xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-<<<<<<< HEAD
     android:id="@+id/map" tools:context=".MapsActivity"
     android:name="com.google.android.gms.maps.SupportMapFragment" />
-=======
-    android:id="@+id/map"
-    tools:context=".MapsActivity"
-    android:name="com.google.android.gms.maps.SupportMapFragment" />
 
-
->>>>>>> ac020790de140b73a009aa940c6a8e8552d58f6d
