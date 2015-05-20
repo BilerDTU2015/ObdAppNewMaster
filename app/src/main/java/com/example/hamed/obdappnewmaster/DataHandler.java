@@ -15,15 +15,15 @@ public class DataHandler {
     //PID 374 state of charge
     public String stateOfChargeRawToReal(byte[] obd_data) {
         String state_of_charge = "";
-//        String state_of_charge_hex = "";
-//        String hex_values = "";
+        String state_of_charge_hex = "";
+        String hex_values = "";
         long hex_to_long = 0;
         try {
-            //hex_values = new String(obd_data, "ASCII");
-            //state_of_charge_hex = hex_values.substring(3, 5);
-            //hex_to_long = Long.parseLong(state_of_charge_hex, 16);
+            hex_values = new String(obd_data, "ASCII");
+            state_of_charge_hex = hex_values.substring(3, 5);
+            hex_to_long = Long.parseLong(state_of_charge_hex, 16);
 
-            hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(2,4), 16);
+            //hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(2,4), 16);
 
             state_of_charge = (hex_to_long * 0.5) - 5 + "%";
         } catch (UnsupportedEncodingException e) {

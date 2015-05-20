@@ -349,21 +349,23 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 //    }
 
     public String readResult() throws IOException {
-        is_reading = true;
-        byte[] buffer = new byte[512];
-        //String inStr="";
+        //is_reading = true;
+        byte[] buffer = new byte[8192];
+        String inStr="";
         String test ="";
         DataHandler dataHandler = new DataHandler();
         try {
-            while(is_reading == true) {
-                int bytesRead = is.read(buffer, 0, 8);
-                //inStr = new String(buffer, "ASCII");
+            //while(is_reading == true) {
+                int bytesRead = is.read(buffer);
+                inStr = new String(buffer, "ASCII");
                 //inStr = inStr.substring(0, 10);
-                //Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
-                test = dataHandler.stateOfChargeRawToReal(buffer);
-                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", test: " + test);
-                buffer = null;
-            }
+                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+//                inStr = new String(buffer, "ASCII");
+//                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+//                test = dataHandler.stateOfChargeRawToReal(buffer);
+//                Log.i("TAGGGGG", "byteCount: " + bytesRead + ", test: " + test);
+//                buffer = null;
+           // }
             //is.read(buffer);
             //return buffer.toString();
         } catch (IOException e){
