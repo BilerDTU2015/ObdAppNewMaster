@@ -54,8 +54,6 @@
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
 
-<<<<<<< HEAD
-=======
         <activity
             android:name="com.example.hamed.obdappnewmaster.fuel_el"
             android:label="fuel_electricity"
@@ -79,8 +77,6 @@
             android:label="temperatur"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
-
->>>>>>> ac020790de140b73a009aa940c6a8e8552d58f6d
 
         <activity
             android:name=".MapsActivity"

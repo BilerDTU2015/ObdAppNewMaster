@@ -1,14 +1,18 @@
 package com.example.hamed.storage;
 
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.example.hamed.maps.Position;
 import com.google.android.gms.maps.model.LatLng;
 
+import java.io.BufferedReader;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
 
 /**
@@ -17,7 +21,21 @@ import java.io.ObjectOutputStream;
  */
 public class InternalStorage {
 
+
+
     public static void appendToFile(Position position, String filename, Context con){
+
+//        String baseFolder;
+//// check if external storage is available
+//        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+//            baseFolder = con.getExternalFilesDir(null).getAbsolutePath();
+//        }
+//// revert to using internal storage
+//        else {
+//            baseFolder = con.getFilesDir().getAbsolutePath();
+//        }
+
+
         FileOutputStream fos;
         try {
             fos = con.openFileOutput(filename, Context.MODE_APPEND);
@@ -50,6 +68,33 @@ public class InternalStorage {
             Log.d("STORAGE", "IOError");
             e.printStackTrace();
         }
+    }
+
+    public static String loadData(String filename, Context con) {
+        FileInputStream in;
+        String input = "";
+
+        try {
+            in = con.openFileInput(filename);
+            if (in != null) {
+                InputStreamReader inputreader = new InputStreamReader(in);
+                BufferedReader buffreader = new BufferedReader(inputreader);
+                String line = "";
+            try
+            {
+                while ((line = buffreader.readLine()) != null)
+                    input += line;
+            }catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+            }
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return input;
     }
 
 }
