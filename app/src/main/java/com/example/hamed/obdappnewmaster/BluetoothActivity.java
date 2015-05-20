@@ -31,12 +31,14 @@ import java.util.UUID;
 public class BluetoothActivity extends Activity implements OnClickListener {
 
     private static final int REQUEST_ENABLE_BT = 1;
+    public static boolean is_reading = false;
 
     private Button onBtn;
     private Button offBtn;
     private Button listBtn;
     private Button findBtn;
     private Button sendCMD;
+    private Button setAtBtn;
 
     private TextView text;
     private BluetoothAdapter myBluetoothAdapter;
@@ -84,6 +86,9 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
             sendCMD = (Button)findViewById(R.id.sendCommand);
             sendCMD.setOnClickListener(this);
+
+            setAtBtn = (Button)findViewById(R.id.setAtParameters);
+            setAtBtn.setOnClickListener(this);
 
             myListView = (ListView)findViewById(R.id.pairedListView);
             ArrayList<String> values = new ArrayList();
@@ -191,6 +196,9 @@ public class BluetoothActivity extends Activity implements OnClickListener {
             case R.id.search:
                 discoverDevices();
                 break;
+            case R.id.setAtParameters:
+                setUpAtCommand();
+                break;
             case R.id.sendCommand:
                 String command01 = "atsp6";
                 String command02 = "ate0";
@@ -198,16 +206,10 @@ public class BluetoothActivity extends Activity implements OnClickListener {
                 String command04 = "atcra 412";
                 String command05 = "atS0";
                 String command06 = "atma";
-                String command07 = "atcra 374";
 
                 try {
-                    //connectToOBD("00:07:80:6E:9F:D2");
-                    sendCommand(command07);
                     sendCommand(command06);
-                    String res = readResult();
-                    //String res2 = formatRawData(res).toString();
-                    Log.d("COMMANDIS", res);
-                    //Log.d("COMMAND", res2);
+                    readResult();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -322,6 +324,21 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         return null;
     }
 
+    public void setUpAtCommand() {
+        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0"};
+        byte[] buffer = new byte[128];
+        try {
+            for (int i = 0; i < 5; i++) {
+
+                os.write((commands[i] + "\r").getBytes());
+                os.flush();
+            }
+            int bytesRead = is.read(buffer);
+            }catch(IOException e){
+            e.printStackTrace();
+        }
+    }
+
     public void sendCommand(String command) throws IOException {
         os.write((command + "\r").getBytes() );
         os.flush();
@@ -329,20 +346,32 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     public String readResult() throws IOException {
-         byte[] buffer = new byte[8192];
-        String inStr="";
-        try {
+        boolean lol = true;
+        byte[] buffer = new byte[20];
+        String test="";
+        String[] tests = new String[2];
+        DataHandler dataHandler = new DataHandler();
+        while(lol=true) {
 
-            int bytesRead = is.read(buffer);
+            try {
 
-                            inStr = new String(buffer, "ASCII");
-                            inStr=inStr.substring(0, bytesRead);
-                            Log.i("TAG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+                int bytesRead = is.read(buffer);
+                if(bytesRead == 20) {
+                    //test = test.substring(0, bytesRead);
+                    tests = dataHandler.velocityAndOdometerRawToReal(buffer);
+                    Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t: " + tests[0] + " km: " + tests[1]);
+//                inStr = new String(buffer, "ASCII");
+//                inStr = inStr.substring(0, bytesRead);
+//                Log.i("TAGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
+                }
+                buffer = new byte[20];
+                test = "";
 
-            //is.read(buffer);
-            //return buffer.toString();
-        } catch (IOException e){
-            e.printStackTrace();
+                //is.read(buffer);
+                //return buffer.toString();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return "";
     }
