@@ -74,7 +74,7 @@
 
         <activity
             android:name="com.example.hamed.obdappnewmaster.temp"
-            android:label="temperatur"
+            android:label="temperature"
             android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity" >
         </activity>
 
@@ -88,6 +88,16 @@
             </intent-filter>
         </activity>
 
+        <activity
+            android:name=".DataActivity"
+            android:label="Data"
+            android:parentActivityName="com.example.hamed.obdappnewmaster.MainActivity">
+        <intent-filter>
+            <action android:name="android.intent.action.MAIN" />
+
+            <category android:name="android.intent.category.LAUNCHER" />
+        </intent-filter>
+        </activity>
 
     </application>
 
