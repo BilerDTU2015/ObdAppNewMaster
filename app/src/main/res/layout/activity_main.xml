@@ -11,7 +11,7 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/BluetoothButton"
+        android:id="@+id/btn_bluetooth"
         android:src="@drawable/rsz_bluetoothcon"
         android:layout_marginTop="33dp"
         android:layout_marginStart="25dp"
@@ -25,16 +25,16 @@
         android:text="  Bluetooth"
         android:id="@+id/textView"
         android:textColor="#fffffcfe"
-        android:layout_below="@+id/BluetoothButton"
-        android:layout_alignStart="@+id/BluetoothButton" />
+        android:layout_below="@+id/btn_bluetooth"
+        android:layout_alignStart="@+id/btn_bluetooth" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton2"
+        android:id="@+id/btn_speed"
         android:src="@drawable/rsz_speed"
-        android:layout_alignTop="@+id/imageButton4"
-        android:layout_alignStart="@+id/textView5" />
+        android:layout_alignTop="@+id/btn_temp"
+        android:layout_alignStart="@+id/textView5"/>
 
     <TextView
         android:layout_width="wrap_content"
@@ -42,14 +42,14 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="  Speed"
         android:id="@+id/textView2"
-        android:layout_below="@+id/imageButton2"
-        android:layout_alignStart="@+id/imageButton2"
+        android:layout_below="@+id/btn_speed"
+        android:layout_alignStart="@+id/btn_speed"
         android:textColor="#ffffffff" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton3"
+        android:id="@+id/btn_fuel"
         android:src="@drawable/rsz_gasstation1"
         android:layout_above="@+id/textView3"
         android:layout_alignStart="@+id/textView6" />
@@ -61,13 +61,13 @@
         android:text="  Fuel/El"
         android:id="@+id/textView3"
         android:layout_alignTop="@+id/textView2"
-        android:layout_alignStart="@+id/imageButton3"
+        android:layout_alignStart="@+id/btn_fuel"
         android:textColor="#ffffffff" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton4"
+        android:id="@+id/btn_temp"
         android:layout_marginTop="71dp"
         android:src="@drawable/rsz_temperature_1con"
         android:layout_below="@+id/textView"
@@ -81,14 +81,14 @@
         android:id="@+id/textView4"
         android:textColor="#ffffffff"
         android:layout_alignTop="@+id/textView2"
-        android:layout_alignStart="@+id/imageButton4" />
+        android:layout_alignStart="@+id/btn_temp" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mapbutton"
+        android:id="@+id/btn_map"
         android:src="@drawable/rsz_map7con"
-        android:layout_alignTop="@+id/BluetoothButton"
+        android:layout_alignTop="@+id/btn_bluetooth"
         android:layout_centerHorizontal="true" />
 
     <TextView
@@ -97,14 +97,14 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="  Map/Route"
         android:id="@+id/textView5"
-        android:layout_below="@+id/mapbutton"
-        android:layout_alignStart="@+id/mapbutton"
+        android:layout_below="@+id/btn_map"
+        android:layout_alignStart="@+id/btn_map"
         android:textColor="#ffffffff" />
 
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/imageButton6"
+        android:id="@+id/btn_support"
         android:src="@drawable/rszmail"
         android:layout_marginEnd="25dp"
         android:layout_above="@+id/textView5"
@@ -116,9 +116,30 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text=" Support"
         android:id="@+id/textView6"
-        android:layout_below="@+id/imageButton6"
-        android:layout_alignStart="@+id/imageButton6"
+        android:layout_below="@+id/btn_support"
+        android:layout_alignStart="@+id/btn_support"
         android:textColor="#ffffffff" />
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/btn_load_data"
+        android:src="@drawable/rszmail"
+        android:layout_marginEnd="25dp"
+        android:layout_marginTop="71dp"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text=" Load data"
+        android:id="@+id/txt_data"
+        android:layout_below="@+id/btn_load_data"
+        android:layout_alignStart="@+id/btn_load_data"
+        android:textColor="#ffffffff" />
+
 
 
 </RelativeLayout>

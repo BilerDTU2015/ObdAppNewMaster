@@ -1,6 +1,9 @@
 package com.example.hamed.obdappnewmaster;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.Image;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.Menu;
@@ -10,8 +13,16 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 
-public class MainActivity extends ActionBarActivity {
+public class MainActivity extends Activity implements View.OnClickListener {
     ImageButton switchact;
+
+    private ImageButton mBtnBluetooth;
+    private ImageButton mBtnMap;
+    private ImageButton mBtnSupport;
+    private ImageButton mBtnTemperature;
+    private ImageButton mBtnSpeed;
+    private ImageButton mBtnFuel;
+    private ImageButton mBtnData;
 
     private Toast toast;
 
@@ -20,107 +31,29 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Bluebutton();
-        Mapbutton ();
-        fuel_button ();
-        speed_button ();
-        support_button ();
-        temp_button ();
+        mBtnBluetooth = (ImageButton)findViewById(R.id.btn_bluetooth);
+        mBtnBluetooth.setOnClickListener(this);
+
+        mBtnMap = (ImageButton)findViewById(R.id.btn_map);
+        mBtnMap.setOnClickListener(this);
+
+        mBtnFuel = (ImageButton)findViewById(R.id.btn_fuel);
+        mBtnFuel.setOnClickListener(this);
+
+        mBtnSupport = (ImageButton)findViewById(R.id.btn_support);
+        mBtnSupport.setOnClickListener(this);
+
+        mBtnTemperature = (ImageButton)findViewById(R.id.btn_temp);
+        mBtnTemperature.setOnClickListener(this);
+
+        mBtnSpeed = (ImageButton)findViewById(R.id.btn_speed);
+        mBtnSpeed.setOnClickListener(this);
+
+        mBtnData = (ImageButton)findViewById(R.id.btn_load_data);
+        mBtnData.setOnClickListener(this);
 
         toast = Toast.makeText(this, "", Toast.LENGTH_LONG);
 
-    }
-
-
-   public void Bluebutton (){
-
-       switchact =(ImageButton)findViewById(R.id.BluetoothButton);
-       switchact.setOnClickListener(new View.OnClickListener() {
-
-           @Override
-           public void onClick(View view) {
-               Intent blueact = new Intent(view.getContext(),BluetoothActivity.class);
-
-               //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-               startActivity(blueact);
-           }
-       });
-   }
-
-
-    public void Mapbutton (){
-
-        switchact =(ImageButton)findViewById(R.id.mapbutton);
-        switchact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent Mapact = new Intent(view.getContext(),MapsActivity.class);
-
-                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(Mapact);
-            }
-        });
-    }
-
-    public void fuel_button (){
-
-        switchact =(ImageButton)findViewById(R.id.imageButton3);
-        switchact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent Fuelact = new Intent(view.getContext(),fuel_el.class);
-
-                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(Fuelact);
-            }
-        });
-    }
-
-    public void speed_button (){
-
-        switchact =(ImageButton)findViewById(R.id.imageButton2);
-        switchact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent Fuelact = new Intent(view.getContext(),speed.class);
-
-                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(Fuelact);
-            }
-        });
-    }
-
-    public void support_button (){
-
-        switchact =(ImageButton)findViewById(R.id.imageButton6);
-        switchact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent Fuelact = new Intent(view.getContext(),support.class);
-
-                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(Fuelact);
-            }
-        });
-    }
-
-    public void temp_button (){
-
-        switchact =(ImageButton)findViewById(R.id.imageButton4);
-        switchact.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View view) {
-                Intent Fuelact = new Intent(view.getContext(),temp.class);
-
-                //Intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                startActivity(Fuelact);
-            }
-        });
     }
 
     @Override
@@ -145,5 +78,31 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onClick(View view) {
+        Context con = view.getContext();
+        Intent intent = null;
 
+        switch (view.getId()) {
+            case R.id.btn_bluetooth:
+                intent = new Intent(con, BluetoothActivity.class);
+                break;
+            case R.id.btn_map:
+                intent = new Intent(con, MapsActivity.class);
+                break;
+            case R.id.btn_fuel:
+                intent = new Intent(con, fuel_el.class);
+                break;
+            case R.id.btn_support:
+                intent = new Intent(con, support.class);
+                break;
+            case R.id.btn_temp:
+                intent = new Intent(con, temp.class);
+                break;
+            case R.id.btn_load_data:
+                intent = new Intent(con, DataActivity.class);
+                break;
+        }
+        startActivity(intent);
+    }
 }
