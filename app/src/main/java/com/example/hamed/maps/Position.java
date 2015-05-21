@@ -1,5 +1,7 @@
 package com.example.hamed.maps;
 
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -13,20 +15,26 @@ import com.google.android.gms.maps.model.LatLng;
 public class Position {
 
     private LatLng position;
-    private String speed;
+    private int speed;
     private String EffectPower;
 
-
-    public Position(LatLng position, String speed){
+    public Position(LatLng position, int speed){
         this.position = position;
         this.speed = speed;
     }
 
+    public LatLng getLatLng(){
+        return position;
+    }
+
+    public int getSpeed() {
+        return speed;
+    }
+
     @Override
     public String toString(){
-        String returnValue = "position : " + position.toString() + " speed : " + speed;
+        String returnValue = position.toString() + " speed : " + speed;
         Log.d("POSITION TO STRING", returnValue);
         return returnValue;
     }
-
 }
