@@ -96,9 +96,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_temp:
                 intent = new Intent(con, TempActivity.class);
                 break;
-            //case R.id.btn_load_data:
-               // intent = new Intent(con, DataActivity.class);
-               // break;
+            case R.id.btn_load_data:
+                intent = new Intent(con, DataActivity.class);
+                break;
         }
         startActivity(intent);
     }
