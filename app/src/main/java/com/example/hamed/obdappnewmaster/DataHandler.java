@@ -17,6 +17,7 @@ public class DataHandler {
         }
         return state_of_charge;
     }
+
     //PID 346 EV Power
     public String evPowerRawToReal(byte[] obd_data) {
         String ev_power = "";
@@ -46,9 +47,7 @@ public class DataHandler {
         }
         return velocityAndOdometer;
     }
-
     /*
-
         //PID 6FA vehicle identification number
     public String vinRawToReal(byte[] obd_data) {
         String vin = "";

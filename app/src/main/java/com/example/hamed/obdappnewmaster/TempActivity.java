@@ -7,12 +7,12 @@ import android.os.Bundle;
 /**
  * Created by Hamed on 18-May-15.
  */
-public class Support extends Activity{
+public class TempActivity extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.support);
-  }
+        setContentView(R.layout.temp);
+    }
 
     private BluetoothSocket mBtSocket;
 
