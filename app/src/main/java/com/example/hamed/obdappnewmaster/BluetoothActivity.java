@@ -65,7 +65,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
         // take an instance of BluetoothAdapter - Bluetooth radio
         myBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-        if(myBluetoothAdapter == null) {
+        if (myBluetoothAdapter == null) {
             onBtn.setEnabled(false);
             offBtn.setEnabled(false);
             listBtn.setEnabled(false);
@@ -76,27 +76,27 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         } else {
 
             text = (TextView) findViewById(R.id.text);
-            live_data = (TextView)findViewById(R.id.live_data);
+            live_data = (TextView) findViewById(R.id.live_data);
 
-            onBtn = (Button)findViewById(R.id.turnOn);
+            onBtn = (Button) findViewById(R.id.turnOn);
             onBtn.setOnClickListener(this);
 
-            offBtn = (Button)findViewById(R.id.turnOff);
+            offBtn = (Button) findViewById(R.id.turnOff);
             offBtn.setOnClickListener(this);
 
-            listBtn = (Button)findViewById(R.id.paired);
+            listBtn = (Button) findViewById(R.id.paired);
             listBtn.setOnClickListener(this);
 
-            sendCMD = (Button)findViewById(R.id.sendCommand);
+            sendCMD = (Button) findViewById(R.id.sendCommand);
             sendCMD.setOnClickListener(this);
 
-            setAtBtn = (Button)findViewById(R.id.setAtParameters);
+            setAtBtn = (Button) findViewById(R.id.setAtParameters);
             setAtBtn.setOnClickListener(this);
 
-            stopBtn = (Button)findViewById(R.id.stopData);
+            stopBtn = (Button) findViewById(R.id.stopData);
             stopBtn.setOnClickListener(this);
 
-            myListView = (ListView)findViewById(R.id.pairedListView);
+            myListView = (ListView) findViewById(R.id.pairedListView);
             ArrayList<String> values = new ArrayList();
             //values.add("Paired devices");
 
@@ -108,10 +108,10 @@ public class BluetoothActivity extends Activity implements OnClickListener {
                                         int position, long id) {
 
                     // ListView Clicked item index
-                    int itemPosition     = position;
+                    int itemPosition = position;
 
                     // ListView Clicked item value
-                    String itemValue    = (String) myListView.getItemAtPosition(position);
+                    String itemValue = (String) myListView.getItemAtPosition(position);
                     // Save device identifier for connection
                     mDeviceIdentifier = itemValue;
 
@@ -122,7 +122,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
                     createConnectDialog();
 
-                    }
+                }
 
 
             });
@@ -132,8 +132,8 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         }
     }
 
- 
-    public void createConnectDialog(){
+
+    public void createConnectDialog() {
 
         // split string into device name and device identifier
         String[] splitted = mDeviceIdentifier.split("\\s+");
@@ -141,8 +141,8 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         final String uuidString = splitted[len - 1];
         String name = "";
         // Add every part of splitted except the last one which is uuid
-        for (String str : splitted){
-            if (str == uuidString){
+        for (String str : splitted) {
+            if (str == uuidString) {
                 break;
             }
             name += str;
@@ -186,13 +186,12 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
 
         switch (v.getId()) {
             case R.id.turnOn:
                 on();
-               break;
+                break;
             case R.id.turnOff:
                 off();
                 break;
@@ -228,7 +227,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         }
     }
 
-    public void on(){
+    public void on() {
         if (!myBluetoothAdapter.isEnabled()) {
 
             Toast.makeText(getApplicationContext(), "Mah method",
@@ -239,8 +238,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
 
             Toast.makeText(getApplicationContext(), "Bluetooth turned on",
                     Toast.LENGTH_LONG).show();
-        }
-        else{
+        } else {
             Toast.makeText(getApplicationContext(), "Bluetooth is already on",
                     Toast.LENGTH_LONG).show();
         }
@@ -249,8 +247,8 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         // TODO Auto-generated method stub
-        if(requestCode == REQUEST_ENABLE_BT){
-            if(myBluetoothAdapter.isEnabled()) {
+        if (requestCode == REQUEST_ENABLE_BT) {
+            if (myBluetoothAdapter.isEnabled()) {
                 text.setText("Status: Enabled");
             } else {
                 text.setText("Status: Disabled");
@@ -258,55 +256,54 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         }
     }
 
-    public void listPairedDevices(){
+    public void listPairedDevices() {
 
         Toast.makeText(getApplicationContext(), "Paired Devices",
                 Toast.LENGTH_LONG).show();
 
-        	if (!myBluetoothAdapter.isEnabled()) {
-    	    Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-    	    startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
-    	}
+        if (!myBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
+        }
 
 //    	// see if there is all ready paired devices
-    	Set<BluetoothDevice> pairedDevices = myBluetoothAdapter.getBondedDevices();
-    	ArrayList<String> deviceInfos = new ArrayList();
-    	// If there are paired devices
-    	if (pairedDevices.size() > 0) {
-    	    // Loop through paired devices
-    	    for (BluetoothDevice device : pairedDevices) {
-    	        // Add the name and address to an array adapter to show in a ListView
-    	    	deviceInfos.add(device.getName() + "\n" + device.getAddress());
-    	      //  mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
-    	    }
-    	    myListView.setAdapter(createAdapter(deviceInfos) );
+        Set<BluetoothDevice> pairedDevices = myBluetoothAdapter.getBondedDevices();
+        ArrayList<String> deviceInfos = new ArrayList();
+        // If there are paired devices
+        if (pairedDevices.size() > 0) {
+            // Loop through paired devices
+            for (BluetoothDevice device : pairedDevices) {
+                // Add the name and address to an array adapter to show in a ListView
+                deviceInfos.add(device.getName() + "\n" + device.getAddress());
+                //  mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
+            }
+            myListView.setAdapter(createAdapter(deviceInfos));
 
-    	}
+        }
     }
 
-    public void discoverDevices(){
+    public void discoverDevices() {
         if (myBluetoothAdapter.isDiscovering()) {
             // the button is pressed when it discovers, so cancel the discovery
             myBluetoothAdapter.cancelDiscovery();
-        }
-        else {
+        } else {
             BTArrayAdapter.clear();
             myBluetoothAdapter.startDiscovery();
             registerReceiver(bReceiver, new IntentFilter(BluetoothDevice.ACTION_FOUND));
         }
     }
 
-    private ArrayAdapter<String> createAdapter(ArrayList<String> data){
+    private ArrayAdapter<String> createAdapter(ArrayList<String> data) {
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data.toArray(new String[data.size()]));
     }
 
-    public void list(View view){
+    public void list(View view) {
         // get paired devices
         pairedDevices = myBluetoothAdapter.getBondedDevices();
 
         // put it's one to the adapter
-        for(BluetoothDevice device : pairedDevices)
-            BTArrayAdapter.add(device.getName()+ "\n" + device.getAddress());
+        for (BluetoothDevice device : pairedDevices)
+            BTArrayAdapter.add(device.getName() + "\n" + device.getAddress());
 
         Toast.makeText(getApplicationContext(), "Show Paired Devices",
                 Toast.LENGTH_SHORT).show();
@@ -325,11 +322,11 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         try {
             socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuidFromString));
             socket.connect();
-                is = socket.getInputStream();
-                os = socket.getOutputStream();
+            is = socket.getInputStream();
+            os = socket.getOutputStream();
 
-                 return socket;
-            } catch (IOException e1) {
+            return socket;
+        } catch (IOException e1) {
             e1.printStackTrace();
         }
         return null;
@@ -345,16 +342,17 @@ public class BluetoothActivity extends Activity implements OnClickListener {
                 os.flush();
             }
             int bytesRead = is.read(buffer);
-            }catch(IOException e){
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     public void sendCommand(String command) throws IOException {
-        os.write((command + "\r").getBytes() );
+        os.write((command + "\r").getBytes());
         os.flush();
 
     }
+
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
     // Create runnable for posting
@@ -371,13 +369,13 @@ public class BluetoothActivity extends Activity implements OnClickListener {
             public void run() {
                 is_reading = true;
                 byte[] buffer = new byte[20];
-                String test="";
+                String test = "";
                 String[] tests = new String[2];
                 DataHandler dataHandler = new DataHandler();
-                while(is_reading=true) {
+                while (is_reading = true) {
                     try {
                         int bytesRead = is.read(buffer);
-                        if(bytesRead == 20) {
+                        if (bytesRead == 20) {
                             tests = dataHandler.velocityAndOdometerRawToReal(buffer);
                             kmt = tests[0];
                             Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t: " + tests[0] + " km: " + tests[1]);
@@ -447,7 +445,6 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
 
-
     final BroadcastReceiver bReceiver = new BroadcastReceiver() {
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
@@ -466,8 +463,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         if (myBluetoothAdapter.isDiscovering()) {
             // the button is pressed when it discovers, so cancel the discovery
             myBluetoothAdapter.cancelDiscovery();
-        }
-        else {
+        } else {
             BTArrayAdapter.clear();
             myBluetoothAdapter.startDiscovery();
 
@@ -475,24 +471,19 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         }
     }
 
-    public void off(){
+    public void off() {
         myBluetoothAdapter.disable();
         text.setText("Status: Disconnected");
 
         Toast.makeText(getApplicationContext(), "Bluetooth turned off",
                 Toast.LENGTH_LONG).show();
     }
-//private BluetoothSocket btSocket;
 
-    @Override
+
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-//        if (btSocket == null) {
-//
-//        }
-//        unregisterReceiver(bReceiver);
     }
 
-    }
+}
 
