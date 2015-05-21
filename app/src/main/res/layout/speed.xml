@@ -11,23 +11,17 @@
         android:maxHeight="100dp"
         android:switchMinWidth="100dp"
         android:minWidth="100dp"
-        android:layout_below="@+id/textView7"
+        android:id="@+id/mySwitch"
+        android:layout_below="@+id/switchStatus"
         android:layout_alignParentStart="true" />
-    <!--android:text="On"-->
-    android:textOff="Off"
-    android:textOn="On"
-    android:id="@+id/switch1"
-    android:checked="false"
-    android:textColor="#ffffffff"
-    android:layout_below="@+id/textView7"
-    android:layout_alignParentStart="true" />
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Recording"
-        android:id="@+id/textView7"
+        android:text="SpeedRecording"
+        android:id="@+id/switchStatus"
         android:textColor="#fff8f4ff"
         android:layout_alignParentTop="true"
         android:layout_alignParentStart="true"
