@@ -424,11 +424,16 @@ public class BluetoothActivity extends Activity implements OnClickListener {
                 Toast.LENGTH_LONG).show();
     }
 
-    @Override
+
+    private BluetoothSocket BtSocket;
+
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
-        unregisterReceiver(bReceiver);
+        //unregisterReceiver(bReceiver);
+        if (BtSocket == null) {
+
+        }
     }
 
     }
