@@ -158,7 +158,7 @@ public class BluetoothActivity extends Activity implements OnClickListener {
             public void onClick(DialogInterface dialog, int id) {
                 // User clicked OK button
                 try {
-                    mBtSocket = connectToOBD(uuidString);
+                    connectToOBD(uuidString);
                     Toast.makeText(getApplicationContext(),
                             "Connected to bt socket : " + mBtSocket.isConnected(), Toast.LENGTH_LONG)
                             .show();
@@ -305,30 +305,30 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     /*
         Class that takes the string with device identifier and tries to create a bluetooth socket to the device and returns the socket.
      */
-    public BluetoothSocket connectToOBD(String deviceAddress) {
+    public void connectToOBD(String deviceAddress) {
 
         String uuidFromString = "00001101-0000-1000-8000-00805f9b34fb";
 
         BluetoothDevice device = myBluetoothAdapter.getRemoteDevice(deviceAddress);
-        BluetoothSocket socket;
+        //BluetoothSocket socket;
         try {
-                socket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuidFromString));
-                socket.connect();
-                is = socket.getInputStream();
-                os = socket.getOutputStream();
+                mBtSocket = device.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuidFromString));
+                mBtSocket.connect();
+                is = mBtSocket.getInputStream();
+                os = mBtSocket.getOutputStream();
 
-                 return socket;
+                 //return steam.mBtSocket;
             } catch (IOException e1) {
             e1.printStackTrace();
         }
-        return null;
+        //return null;
     }
 
     public void setUpAtCommand() {
-        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0"};
+        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0", "atcra 412"};
         byte[] buffer = new byte[128];
         try {
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
 
                 os.write((commands[i] + "\r").getBytes());
                 os.flush();
@@ -346,23 +346,16 @@ public class BluetoothActivity extends Activity implements OnClickListener {
     }
 
     public String readResult() throws IOException {
-        boolean lol = true;
         byte[] buffer = new byte[20];
         String test="";
         String[] tests = new String[2];
         DataHandler dataHandler = new DataHandler();
-        while(lol=true) {
-
+        while(is_reading=true) {
             try {
-
                 int bytesRead = is.read(buffer);
                 if(bytesRead == 20) {
-                    //test = test.substring(0, bytesRead);
                     tests = dataHandler.velocityAndOdometerRawToReal(buffer);
                     Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t: " + tests[0] + " km: " + tests[1]);
-//                inStr = new String(buffer, "ASCII");
-//                inStr = inStr.substring(0, bytesRead);
-//                Log.i("TAGGGG", "byteCount: " + bytesRead + ", inStr: " + inStr);
                 }
                 buffer = new byte[20];
                 test = "";
@@ -438,14 +431,5 @@ public class BluetoothActivity extends Activity implements OnClickListener {
         unregisterReceiver(bReceiver);
     }
 
-    public void onBackPressed() {
-
-        startActivity(new Intent(this, MainActivity.class));
-        finish();
-
-        //super.onBackPressed();
-        //this.finish();
-
-            }
     }
 
