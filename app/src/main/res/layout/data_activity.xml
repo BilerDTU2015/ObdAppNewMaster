@@ -6,6 +6,12 @@
     <Button
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:text="Show data on map"
+        android:id="@+id/btn_load_map" />
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:text="Load saved data"
         android:id="@+id/btn_load" />
 
