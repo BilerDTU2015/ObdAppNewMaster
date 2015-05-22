@@ -63,7 +63,7 @@ public class ServiceTest extends IntentService {
                 receiver.send(STATUS_ERROR, bundle);
             }
 
-        Log.d(TAG, "Service Stopping!");
+        Log.d(TAG, "Service Stopping");
         this.stopSelf();
     }
 
