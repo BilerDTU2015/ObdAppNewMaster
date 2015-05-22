@@ -101,7 +101,9 @@
             </intent-filter>
         </activity>
 
-
+        <service
+            android:name=".ServiceTest"
+            android:exported="false" />
     </application>
 
 
