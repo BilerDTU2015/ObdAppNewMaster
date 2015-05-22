@@ -17,6 +17,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 
 /**
  * Created by Niclas on 5/13/15.
@@ -24,27 +25,27 @@ import java.io.ObjectOutputStream;
  */
 public class InternalStorage {
 
+    public static final String FILE_NAME = "current_recording.txt";
 
-
-    public static void appendToFile(Position position, String filename, Context con){
-
-//        String baseFolder;
-//// check if external storage is available
-//        if(Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-//            baseFolder = con.getExternalFilesDir(null).getAbsolutePath();
-//        }
-//// revert to using internal storage
-//        else {
-//            baseFolder = con.getFilesDir().getAbsolutePath();
-//        }
-        Log.d("InternalStorage", "trying to append");
-
+    /**
+     *
+     * @param position as custom data bearing object
+     * @param con context of caller
+     */
+    public static void appendToFile(Position position, Context con){
         FileOutputStream fos;
+        String positionString = position.toString();
+        String[] positionParts = positionString.split(":");
+        String latLng = positionParts[1];
+        String speed = positionParts[2];
+
+        Log.d("InternalStorage latlnt", latLng);
+
         try {
-            fos = con.openFileOutput(filename, Context.MODE_APPEND);
+            fos = con.openFileOutput(FILE_NAME, Context.MODE_APPEND);
 
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(position.toString());
+            oos.writeObject(latLng + ":" + speed + ";" +"\n");
             oos.close();
         } catch (FileNotFoundException e) {
             Log.d("STORAGE", "Could not open fileOutput");
@@ -56,6 +57,13 @@ public class InternalStorage {
     }
 
     // data can easily be changes to a custom class holding the data
+    /**
+     *
+     * @param data
+     * @param filename
+     * @param con
+     * @throws Exception
+     */
     public static void save(String data, String filename, Context con) throws Exception{
         Log.d("INTERNAL STORAGE " , data);
 
@@ -75,12 +83,17 @@ public class InternalStorage {
         }
     }
 
-    public static String loadData(String filename, Context con) {
+    /**
+     *
+     * @param con context of caller
+     * @return Arraylist with sanitized data, see Position.java for reference
+     */
+    public static ArrayList<Position> loadData(Context con) {
         FileInputStream in;
         String input = "";
 
         try {
-            in = con.openFileInput(filename);
+            in = con.openFileInput(FILE_NAME);
             if (in != null) {
                 InputStreamReader inputreader = new InputStreamReader(in);
                 BufferedReader buffreader = new BufferedReader(inputreader);
@@ -98,8 +111,30 @@ public class InternalStorage {
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
-        return input;
+        //String[] resultWithoutHeader = input.split("#");
+        return sanitizeLoadedData(input);
     }
 
+    // Helper method to clean data
+    private static ArrayList<Position> sanitizeLoadedData(String data) {
+        ArrayList<Position> sanitizedData = new ArrayList<>();
+              if (data != null){
+            String[] mapEntries = data.split(";");
+            for (String str : mapEntries) {
+                String[] posAndSpeed = str.split("speed");
+                String lat = posAndSpeed[0].split(",")[0].split("\\(")[1];
+                String lng = posAndSpeed[0].split(",")[1].split("\\)")[0];
+                String speed = posAndSpeed[1].split(":")[1].substring(1);
+
+                Log.d("mark Lat", lat);
+                Log.d("mark Lng", lng);
+                Log.d("mark speed", speed);
+
+                LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
+                Position pos = new Position(latLng, Integer.valueOf(speed));
+                sanitizedData.add(pos);
+            }
+        }
+        return sanitizedData;
+    }
 }

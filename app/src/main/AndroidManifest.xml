@@ -89,6 +89,18 @@
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
         </activity>
+
+        <activity
+            android:name="com.example.hamed.maps.MapViewer"
+            android:label="Data"
+            android:parentActivityName="com.example.hamed.obdappnewmaster.DataActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <service
             android:name=".ServiceTest"
             android:exported="false" />

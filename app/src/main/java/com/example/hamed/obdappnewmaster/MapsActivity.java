@@ -26,6 +26,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -205,6 +206,12 @@ public class MapsActivity extends FragmentActivity {
             // Check if we were successful in obtaining the map.
             if (mMap != null) {
 
+                // clear the data file so we don't append dat to old file
+                try {
+                    InternalStorage.save("", "current_recording.txt", getApplicationContext());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
 
                 mMap.setOnMyLocationChangeListener(new GoogleMap.OnMyLocationChangeListener() {
 
@@ -214,13 +221,11 @@ public class MapsActivity extends FragmentActivity {
                         MarkerOptions marker = new MarkerOptions().position(currentLocation);
 
                         // Record location
-                        Position pos = new Position(currentLocation, String.valueOf(generateRandomSpeed()));
-                        //storage.appendToFile(pos, "current_recording.txt", getApplicationContext());
-                        //InternalStorage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                        Position pos = new Position(currentLocation, generateRandomSpeed());
                         String locationString = pos.toString();
                         try {
                             //InternalStorage.save(locationString, "current_recording.txt", getApplicationContext());
-                            InternalStorage.appendToFile(pos, "current_recording.txt", getApplicationContext());
+                            InternalStorage.appendToFile(pos, getApplicationContext());
                         } catch (Exception e) {
                             e.printStackTrace();
                         }

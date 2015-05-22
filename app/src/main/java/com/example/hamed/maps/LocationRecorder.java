@@ -25,10 +25,6 @@ public class LocationRecorder extends FragmentActivity {
     private boolean RECORDING = false;
     private Context context;
 
-    // File to save location data and speed
-    private String RECORDING_DIR = "//assets/";
-    private String FILE_NAME = "current_recording.txt";
-
     public LocationRecorder(Context context, GoogleMap map){
         this.context = context;
         this.mMap = map;
@@ -86,9 +82,8 @@ public class LocationRecorder extends FragmentActivity {
                     public void onMyLocationChange(Location arg0) {
                         LatLng currentLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
 
-                        String randomSpeed = String.valueOf(generateRandomSpeed());
-                        Position position = new Position(currentLocation, randomSpeed);
-                        InternalStorage.appendToFile(position, RECORDING_DIR+FILE_NAME, context);
+                        Position position = new Position(currentLocation, generateRandomSpeed());
+                        InternalStorage.appendToFile(position, context);
                     }
                 });
 
