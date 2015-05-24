@@ -1,15 +1,11 @@
 package com.example.hamed.obdappnewmaster;
 
 import android.app.IntentService;
-import android.app.Service;
 import android.bluetooth.BluetoothDevice;
 import android.bluetooth.BluetoothSocket;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.IBinder;
 import android.os.ResultReceiver;
-import android.text.TextUtils;
 import android.util.Log;
 
 import java.io.IOException;
@@ -19,17 +15,26 @@ import java.util.UUID;
 
 public class ServiceTest extends IntentService {
 
-    public static final int STATUS_RUNNING = 0;
-    public static final int STATUS_FINISHED = 1;
-    public static final int STATUS_ERROR = 2;
+    public static final int STATUS_ERROR = 0;
+    public static final int STATUS_SENDING = 1;
+    public static final int STATUS_SENDING_ARRAY = 2;
+    public static final int STOP = 0;
+    public static final int START_UP = 1;
+    public static final int SEND_COMMAND = 2;
+
+    public static final String AT_STOP = "z";
+    public static final String ATMA = "atma";
+
+    private static boolean is_reading = false;
     private String pid = "";
+    private static final String TAG = "SocketService : ";
+    private int requestId;
 
-    private static final String TAG = "DownloadService";
-
-    private boolean is_reading = false;
+    private BluetoothDevice bluetoothDevice;
     private Bundle bundle;
-    private InputStream inputStream;
-    private OutputStream outputStream;
+    private static InputStream inputStream;
+    private static OutputStream outputStream;
+    private static BluetoothSocket socket;
 
     public ServiceTest() {
         super(ServiceTest.class.getName());
@@ -37,55 +42,66 @@ public class ServiceTest extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        final ResultReceiver receiver = intent.getParcelableExtra("receiver");
-        Log.d(TAG, "Service Started!");
-
-        String pid = intent.getStringExtra("pid");
-        BluetoothDevice bluetoothDevice = intent.getParcelableExtra("bluetoothDevice");
-
+        pid = "";
+        ResultReceiver receiver = intent.getParcelableExtra("receiver");
+        requestId = intent.getIntExtra("requestId", 0);
         bundle = new Bundle();
-
-            /* Update UI: Download Service is Running */
-            //receiver.send(STATUS_RUNNING, Bundle.EMPTY);
-
-            try {
-
-                /* Sending result back to activity */
+        switch (requestId) {
+            case START_UP:
+                Log.d(TAG, "Service Started!");
+                bluetoothDevice = intent.getParcelableExtra("bluetoothDevice");
                 connectToOBD(bluetoothDevice);
-                setUpAtCommand(pid);
-                sendCommand();
-                readData(receiver);
-
-            } catch (Exception e) {
-
-                /* Sending error message back to activity */
-                bundle.putString(Intent.EXTRA_TEXT, e.toString());
-                receiver.send(STATUS_ERROR, bundle);
-            }
-
+                break;
+            case STOP:
+                try {
+                    is_reading = false;
+                    sendCommand(AT_STOP);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                break;
+            case SEND_COMMAND:
+                try {
+                    pid = intent.getStringExtra("pid");
+                    setUpAtCommand();
+                    if (!pid.equals("")) {
+                        sendCommand("atcra " + pid);
+                    }
+                    sendCommand(ATMA);
+                    readData(receiver);
+                } catch (IOException e) {
+                    bundle.putString(Intent.EXTRA_TEXT, e.toString());
+                    receiver.send(STATUS_ERROR, bundle);
+                }
+                break;
+        }
         Log.d(TAG, "Service Stopping");
         this.stopSelf();
     }
 
     // Class that takes the string with device identifier and tries to create a bluetooth socket to the device and returns the socket.
     public void connectToOBD(BluetoothDevice bluetoothDevice) {
-        String uuidFromString = "00001101-0000-1000-8000-00805f9b34fb";
-        BluetoothSocket socket;
-        try {
-            socket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuidFromString));
-            socket.connect();
-            inputStream = socket.getInputStream();
-            outputStream = socket.getOutputStream();
-
-        } catch (IOException e1) {
-            e1.printStackTrace();
+        if (this.socket == null) {
+            String uuidFromString = "00001101-0000-1000-8000-00805f9b34fb";
+            try {
+                this.socket = bluetoothDevice.createInsecureRfcommSocketToServiceRecord(UUID.fromString(uuidFromString));
+                this.socket.connect();
+                inputStream = this.socket.getInputStream();
+                outputStream = this.socket.getOutputStream();
+                Log.d(TAG, "Connected to car");
+            } catch (IOException e1) {
+                Log.d(TAG, "Fail to connect to car");
+                e1.printStackTrace();
+            }
+        } else {
+            Log.d(TAG, "Already Connected");
         }
     }
 
-    public void setUpAtCommand(String pid) {
-        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0", "atcra " + pid};
+    public void setUpAtCommand() {
+        String[] commands = new String[]{"atsp6", "ate0", "ath1", "atcaf0", "atS0"};
         try {
-            for (int i = 0; i < 6; i++) {
+            for (int i = 0; i < 5; i++) {
                 outputStream.write((commands[i] + "\r").getBytes());
                 outputStream.flush();
             }
@@ -106,8 +122,8 @@ public class ServiceTest extends IntentService {
         }
     }
 
-    public void sendCommand() throws IOException {
-        outputStream.write(("atma" + "\r").getBytes());
+    public void sendCommand(String at_command) throws IOException {
+        outputStream.write((at_command + "\r").getBytes());
         outputStream.flush();
         clearInput();
     }
@@ -118,24 +134,42 @@ public class ServiceTest extends IntentService {
             public void run() {
                 is_reading = true;
                 byte[] buffer = new byte[20];
-                String[] tests;
                 DataHandler dataHandler = new DataHandler();
-                while (is_reading = true) {
-                    try {
-                        int bytesRead = inputStream.read(buffer);
-                        if (bytesRead == 20) {
-                            tests = dataHandler.velocityAndOdometerRawToReal(buffer);
-                            bundle.putStringArray("result", tests);
-                            receiver.send(STATUS_FINISHED, bundle);
-                            //kmt = tests[0];
-                            Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t: " + tests[0] + " km: " + tests[1]);
+                String[] tests;
+                String test;
+                String pid;
+                    while (is_reading) {
+                        try {
+                            int bytesRead = inputStream.read(buffer);
+                            if (bytesRead == 20) {
+                                pid = new String(buffer, "ASCII").substring(0, 3);
+                                switch (pid){
+                                    case "412":
+                                        tests = dataHandler.velocityAndOdometerRawToReal(buffer);
+                                        bundle.putStringArray("result", tests);
+                                        receiver.send(STATUS_SENDING_ARRAY, bundle);
+                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t : " + tests[0] + " km : " + tests[1]);
+                                        break;
+                                    case "346":
+                                        test = dataHandler.evPowerRawToReal(buffer);
+                                        bundle.putString("result", test);
+                                        receiver.send(STATUS_SENDING, bundle);
+                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", W : " + test);
+                                        break;
+                                    case "374":
+                                        test = dataHandler.stateOfChargeRawToReal(buffer);
+                                        bundle.putString("result", test);
+                                        receiver.send(STATUS_SENDING, bundle);
+                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", power : " + test);
+                                        break;
+                                }
+                            }
+                            buffer = new byte[20];
+                        } catch (IOException e) {
+                            e.printStackTrace();
                         }
-                        buffer = new byte[20];
-                    } catch (IOException e) {
-                        e.printStackTrace();
                     }
                 }
-            }
         };
         t.start();
     }
