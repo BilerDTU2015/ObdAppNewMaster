@@ -34,7 +34,6 @@ import java.util.UUID;
 public class BluetoothActivity extends Activity implements OnClickListener,DownloadResultReceiver.Receiver {
 
     private static final int REQUEST_ENABLE_BT = 1;
-    public static boolean is_reading = false;
 
     private Button onBtn;
     private Button offBtn;
@@ -42,24 +41,17 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     private Button sendCMD;
     private Button setAtBtn;
     private Button stopBtn;
-
     private TextView text;
     private TextView live_data;
     private BluetoothAdapter myBluetoothAdapter;
-    private Set<BluetoothDevice> pairedDevices;
     private ListView myListView;
     private ArrayAdapter<String> BTArrayAdapter;
-    private BluetoothSocket mBtSocket;
     private DownloadResultReceiver mReceiver;
     private BluetoothDevice bluetoothDevice;
-
     private String mDeviceIdentifier;
     private String pid;
     private String kmt;
-
-    private InputStream is;
-    private OutputStream os;
-
+    private int requestId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +119,19 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             mReceiver.setReceiver(this);
         }
     }
+
+    public void startUpService() {
+        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
+
+        /* Send optional extras to Download IntentService */
+        //intent.putExtra("pid", this.pid);
+        intent.putExtra("bluetoothDevice", this.bluetoothDevice);
+        intent.putExtra("receiver", this.mReceiver);
+        intent.putExtra("requestId", ServiceTest.START_UP);
+
+        startService(intent);
+    }
+
     public String getUUID() {
         // split string into device name and device identifier
         String[] splitted = mDeviceIdentifier.split("\\s+");
@@ -204,22 +209,10 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
                     //sendCommand("atma");
                     //startLongRunningOperation();
                 this.pid = "412";
-                    runService();
+                startUpService();
                 break;
 
         }
-    }
-
-    public void runService() {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
-
-        /* Send optional extras to Download IntentService */
-        intent.putExtra("pid", this.pid);
-        intent.putExtra("bluetoothDevice", this.bluetoothDevice);
-        intent.putExtra("receiver", this.mReceiver);
-        intent.putExtra("requestId", 101);
-
-        startService(intent);
     }
 
     public void on() {
@@ -315,22 +308,13 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
-            case ServiceTest.STATUS_RUNNING:
-
-                setProgressBarIndeterminateVisibility(true);
-                break;
-            case ServiceTest.STATUS_FINISHED:
-                /* Hide progress & extract result from bundle */
-
+            case ServiceTest.STATUS_SENDING:
                 String[] results = resultData.getStringArray("result");
+                kmt = results[0];
                 Log.i("RECIVED", "speed : " + results[0] + "total : " + results[1]);
                 updateReadData();
-
-                /* Update ListView with result */
-
                 break;
             case ServiceTest.STATUS_ERROR:
-                /* Handle the error */
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 break;

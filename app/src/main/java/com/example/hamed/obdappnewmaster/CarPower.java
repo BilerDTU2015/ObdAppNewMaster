@@ -4,9 +4,6 @@ import android.app.Activity;
 import android.bluetooth.BluetoothSocket;
 import android.os.Bundle;
 
-/**
- * Created by Hamed on 18-May-15.
- */
 public class CarPower extends Activity {
 
     protected void onCreate(Bundle savedInstanceState) {
