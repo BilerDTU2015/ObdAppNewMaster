@@ -12,7 +12,7 @@ public class DataHandler {
 
             hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(5,7), 16);
             state_of_charge = (hex_to_long * 0.5) - 5 + "%";
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return state_of_charge;
@@ -25,7 +25,7 @@ public class DataHandler {
         try {
             hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
             ev_power = (hex_to_long * 10) - 100000 + "W";
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return ev_power;
@@ -42,7 +42,7 @@ public class DataHandler {
             velocityAndOdometer[0] = hex_to_long_v - 65024 + "km/t";
             hex_to_long_o = Long.parseLong(new String(obd_data, "ASCII").substring(7,13), 16);
             velocityAndOdometer[1] = hex_to_long_o + "km";
-        } catch (UnsupportedEncodingException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         return velocityAndOdometer;

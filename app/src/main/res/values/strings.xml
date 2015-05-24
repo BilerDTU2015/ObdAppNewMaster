@@ -9,5 +9,14 @@
     <string name="List">List paired Devices</string>
     <string name="Find">Search new Devices / Cancel</string>
     <string name="sendCommand">Send AT command to device</string>
+    <string name="title_activity_live_data">LiveDataActivity</string>
+
+    <string name="pid_prompt">Choose your data</string>
+
+    <string-array name="pid">
+        <item>Velocity</item>
+        <item>Power</item>
+        <item>Watt</item>
+    </string-array>
 
 </resources>

@@ -4,32 +4,21 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
-import android.bluetooth.BluetoothSocket;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.ResultReceiver;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Set;
-import java.util.UUID;
 
 public class BluetoothActivity extends Activity implements OnClickListener,DownloadResultReceiver.Receiver {
 
@@ -49,9 +38,8 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     private DownloadResultReceiver mReceiver;
     private BluetoothDevice bluetoothDevice;
     private String mDeviceIdentifier;
-    private String pid;
+    private String pid = "";
     private String kmt;
-    private int requestId = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -108,27 +96,34 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
                             "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
                             .show();
                     bluetoothDevice = myBluetoothAdapter.getRemoteDevice(getUUID());
+                    sendToService(ServiceTest.START_UP);
                 }
             });
-
             BTArrayAdapter = createAdapter(values);
             myListView.setAdapter(BTArrayAdapter);
-
-
-            mReceiver = new DownloadResultReceiver(new Handler());
-            mReceiver.setReceiver(this);
         }
     }
 
-    public void startUpService() {
+    public void sendToService(int requestId) {
         Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
 
+        mReceiver = new DownloadResultReceiver(new Handler());
+        mReceiver.setReceiver(this);
         /* Send optional extras to Download IntentService */
-        //intent.putExtra("pid", this.pid);
-        intent.putExtra("bluetoothDevice", this.bluetoothDevice);
         intent.putExtra("receiver", this.mReceiver);
-        intent.putExtra("requestId", ServiceTest.START_UP);
-
+        switch (requestId){
+            case ServiceTest.STOP:
+                intent.putExtra("requestId", requestId);
+                break;
+            case ServiceTest.START_UP:
+                intent.putExtra("requestId", requestId);
+                intent.putExtra("bluetoothDevice", this.bluetoothDevice);
+                break;
+            case ServiceTest.SEND_COMMAND:
+                intent.putExtra("requestId", requestId);
+                intent.putExtra("pid", this.pid);
+                break;
+        }
         startService(intent);
     }
 
@@ -191,25 +186,16 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             case R.id.paired:
                 listPairedDevices();
                 break;
-            /*
+            case R.id.stopData:
+                sendToService(ServiceTest.STOP);
+                break;
             case R.id.setAtParameters:
-              //  setUpAtCommand();
+                this.pid = "346";
+                sendToService(ServiceTest.SEND_COMMAND);
                 break;
-            //case R.id.stopData:
-                //try {
-                   // sendCommand("z");
-                   // clearInput();
-                   // is_reading = false;
-                //} catch (IOException e) {
-                   // e.printStackTrace();
-                //}
-                break;
-                */
             case R.id.sendCommand:
-                    //sendCommand("atma");
-                    //startLongRunningOperation();
                 this.pid = "412";
-                startUpService();
+                sendToService(ServiceTest.SEND_COMMAND);
                 break;
 
         }
@@ -311,7 +297,7 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             case ServiceTest.STATUS_SENDING:
                 String[] results = resultData.getStringArray("result");
                 kmt = results[0];
-                Log.i("RECIVED", "speed : " + results[0] + "total : " + results[1]);
+                Log.i("RECIVED", "Velocity : " + results[0] + "Total km : " + results[1]);
                 updateReadData();
                 break;
             case ServiceTest.STATUS_ERROR:
