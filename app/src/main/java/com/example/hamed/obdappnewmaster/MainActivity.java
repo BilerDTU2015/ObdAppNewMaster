@@ -11,6 +11,8 @@ import android.widget.ImageButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.google.android.gms.maps.GoogleMap;
+
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
@@ -19,6 +21,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ImageButton mBtnDashboard;
     private TextView switchStatus;
     private Switch mySwitch;
+    private GoogleMap map;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +36,35 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         switchStatus = (TextView) findViewById(R.id.switchStatus);
         mySwitch = (Switch) findViewById(R.id.mySwitch);
+        switchButton();
+
+
+    }
+
+    @Override
+    public void onClick(View view) {
+        Context con = view.getContext();
+        Intent intent = null;
+
+        switch (view.getId()) {
+            case R.id.btn_bluetooth:
+                intent = new Intent(con, BluetoothActivity.class);
+                break;
+            case R.id.btn_map:
+                intent = new Intent(con, MapsActivity.class);
+                break;
+            case R.id.btn_dashboard:
+                intent = new Intent(con, MapsActivity.class);
+                break;
+
+
+
+        }
+        startActivity(intent);
+    }
+
+
+    public void switchButton(){
 
         mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
 
@@ -67,21 +99,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
             switchStatus.setText("SpeedRecording is currently OFF");
         }
 
+
+
     }
 
-    @Override
-    public void onClick(View view) {
-        Context con = view.getContext();
-        Intent intent = null;
 
-        switch (view.getId()) {
-            case R.id.btn_bluetooth:
-                intent = new Intent(con, BluetoothActivity.class);
-                break;
-            case R.id.btn_map:
-                intent = new Intent(con, MapsActivity.class);
-                break;
-        }
-        startActivity(intent);
-    }
 }

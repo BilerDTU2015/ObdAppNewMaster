@@ -26,7 +26,12 @@ public class LocationRecorder extends FragmentActivity {
     public LocationRecorder(Context context, GoogleMap map){
         this.context = context;
         this.mMap = map;
+        setRecording(true);
+        getStatus();
+
     }
+
+
 
     // Change the recording status, returns true if status is changed, false if already recording
     // or already off
