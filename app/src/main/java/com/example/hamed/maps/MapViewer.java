@@ -1,21 +1,17 @@
 package com.example.hamed.maps;
 
 
-import android.content.SharedPreferences;
-import android.graphics.Color;
-import android.location.Location;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 
 import com.example.hamed.obdappnewmaster.R;
 import com.example.hamed.storage.InternalStorage;
+import com.example.hamed.storage.Position;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;

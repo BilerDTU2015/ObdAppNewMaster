@@ -1,4 +1,4 @@
-package com.example.hamed.obdappnewmaster;
+package com.example.hamed.Service;
 
 import android.app.IntentService;
 import android.bluetooth.BluetoothDevice;
@@ -7,6 +7,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
+
+import com.example.hamed.storage.DataHandler;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -18,6 +20,7 @@ public class ServiceTest extends IntentService {
     public static final int STATUS_ERROR = 0;
     public static final int STATUS_SENDING = 1;
     public static final int STATUS_SENDING_ARRAY = 2;
+    public static final int STATUS_CONNECTED = 3;
     public static final int STOP = 0;
     public static final int START_UP = 1;
     public static final int SEND_COMMAND = 2;
@@ -50,14 +53,16 @@ public class ServiceTest extends IntentService {
             case START_UP:
                 Log.d(TAG, "Service Started!");
                 bluetoothDevice = intent.getParcelableExtra("bluetoothDevice");
-                connectToOBD(bluetoothDevice);
+                connectToOBD(bluetoothDevice, receiver);
+                receiver.send(STATUS_CONNECTED, bundle);
                 break;
             case STOP:
                 try {
                     is_reading = false;
                     sendCommand(AT_STOP);
                 } catch (IOException e) {
-                    e.printStackTrace();
+                    bundle.putString(Intent.EXTRA_TEXT, e.toString());
+                    receiver.send(STATUS_ERROR, bundle);
                 }
                 break;
             case SEND_COMMAND:
@@ -80,7 +85,7 @@ public class ServiceTest extends IntentService {
     }
 
     // Class that takes the string with device identifier and tries to create a bluetooth socket to the device and returns the socket.
-    public void connectToOBD(BluetoothDevice bluetoothDevice) {
+    public void connectToOBD(BluetoothDevice bluetoothDevice, ResultReceiver receiver) {
         if (this.socket == null) {
             String uuidFromString = "00001101-0000-1000-8000-00805f9b34fb";
             try {
@@ -89,9 +94,10 @@ public class ServiceTest extends IntentService {
                 inputStream = this.socket.getInputStream();
                 outputStream = this.socket.getOutputStream();
                 Log.d(TAG, "Connected to car");
-            } catch (IOException e1) {
+            } catch (IOException e) {
                 Log.d(TAG, "Fail to connect to car");
-                e1.printStackTrace();
+                bundle.putString(Intent.EXTRA_TEXT, e.toString());
+                receiver.send(STATUS_ERROR, bundle);
             }
         } else {
             Log.d(TAG, "Already Connected");

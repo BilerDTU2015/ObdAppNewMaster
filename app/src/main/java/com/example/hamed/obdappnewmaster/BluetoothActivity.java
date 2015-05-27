@@ -17,6 +17,10 @@ import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.hamed.Service.DownloadResultReceiver;
+import com.example.hamed.Service.ServiceTest;
+
 import java.util.ArrayList;
 import java.util.Set;
 
@@ -27,19 +31,13 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     private Button onBtn;
     private Button offBtn;
     private Button listBtn;
-    private Button sendCMD;
-    private Button setAtBtn;
-    private Button stopBtn;
     private TextView text;
-    private TextView live_data;
     private BluetoothAdapter myBluetoothAdapter;
     private ListView myListView;
     private ArrayAdapter<String> BTArrayAdapter;
     private DownloadResultReceiver mReceiver;
     private BluetoothDevice bluetoothDevice;
     private String mDeviceIdentifier;
-    private String pid = "";
-    private String kmt;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +55,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
         } else {
 
             text = (TextView) findViewById(R.id.text);
-            live_data = (TextView) findViewById(R.id.live_data);
 
             onBtn = (Button) findViewById(R.id.turnOn);
             onBtn.setOnClickListener(this);
@@ -67,15 +64,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
 
             listBtn = (Button) findViewById(R.id.paired);
             listBtn.setOnClickListener(this);
-
-            sendCMD = (Button) findViewById(R.id.sendCommand);
-            sendCMD.setOnClickListener(this);
-
-            setAtBtn = (Button) findViewById(R.id.setAtParameters);
-            setAtBtn.setOnClickListener(this);
-
-            stopBtn = (Button) findViewById(R.id.stopData);
-            stopBtn.setOnClickListener(this);
 
             myListView = (ListView) findViewById(R.id.pairedListView);
             ArrayList<String> values = new ArrayList();
@@ -96,7 +84,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
                             "Position :" + itemPosition + "  ListItem : " + itemValue, Toast.LENGTH_LONG)
                             .show();
                     bluetoothDevice = myBluetoothAdapter.getRemoteDevice(getUUID());
-                    sendToService(ServiceTest.START_UP);
                 }
             });
             BTArrayAdapter = createAdapter(values);
@@ -104,28 +91,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
         }
     }
 
-    public void sendToService(int requestId) {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
-
-        mReceiver = new DownloadResultReceiver(new Handler());
-        mReceiver.setReceiver(this);
-        /* Send optional extras to Download IntentService */
-        intent.putExtra("receiver", this.mReceiver);
-        switch (requestId){
-            case ServiceTest.STOP:
-                intent.putExtra("requestId", requestId);
-                break;
-            case ServiceTest.START_UP:
-                intent.putExtra("requestId", requestId);
-                intent.putExtra("bluetoothDevice", this.bluetoothDevice);
-                break;
-            case ServiceTest.SEND_COMMAND:
-                intent.putExtra("requestId", requestId);
-                intent.putExtra("pid", this.pid);
-                break;
-        }
-        startService(intent);
-    }
 
     public String getUUID() {
         // split string into device name and device identifier
@@ -150,18 +115,7 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
         AlertDialog dialog = builder.create();
         builder.setPositiveButton("Yes mein Führer", new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int id) {
-                // User clicked OK button
-//                try {
-//                    mBtSocket = connectToOBD(uuidString);
-//                    Toast.makeText(getApplicationContext(),
-//                            "Connected to bt socket : " + mBtSocket.isConnected(), Toast.LENGTH_LONG)
-//                            .show();
-//                } catch (Exception e) {
-//                    Toast.makeText(getApplicationContext(),
-//                            "fail", Toast.LENGTH_LONG)
-//                            .show();
-//                    e.printStackTrace();
-//                }
+                sendToService();
             }
         });
         builder.setNegativeButton("NEIN NEIN NEIN!", new DialogInterface.OnClickListener() {
@@ -186,18 +140,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             case R.id.paired:
                 listPairedDevices();
                 break;
-            case R.id.stopData:
-                sendToService(ServiceTest.STOP);
-                break;
-            case R.id.setAtParameters:
-                this.pid = "346";
-                sendToService(ServiceTest.SEND_COMMAND);
-                break;
-            case R.id.sendCommand:
-                this.pid = "412";
-                sendToService(ServiceTest.SEND_COMMAND);
-                break;
-
         }
     }
 
@@ -244,7 +186,7 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
             startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
         }
-//    	// see if there is all ready paired devices
+    	// see if there is all ready paired devices
         Set<BluetoothDevice> pairedDevices = myBluetoothAdapter.getBondedDevices();
         ArrayList<String> deviceInfos = new ArrayList();
         // If there are paired devices
@@ -253,7 +195,6 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
             for (BluetoothDevice device : pairedDevices) {
                 // Add the name and address to an array adapter to show in a ListView
                 deviceInfos.add(device.getName() + "\n" + device.getAddress());
-                //  mArrayAdapter.add(device.getName() + "\n" + device.getAddress());
             }
             myListView.setAdapter(createAdapter(deviceInfos));
         }
@@ -263,42 +204,28 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
         return new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, data.toArray(new String[data.size()]));
     }
 
-    // Need handler for callbacks to the UI thread
-    final Handler mHandler = new Handler();
-    // Create runnable for posting
-    final Runnable mUpdateResults = new Runnable() {
-        public void run() {
-            updateResultsInUi();
-        }
-    };
-
-    protected void updateReadData() {
-        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
-        Thread t = new Thread() {
-            public void run() {
-                mHandler.post(mUpdateResults);
-            }
-        };
-        t.start();
-    }
-
-    private void updateResultsInUi() {
-        live_data.setText(this.kmt);
-    }
-
     protected void onDestroy() {
         // TODO Auto-generated method stub
         super.onDestroy();
+    }
+
+    public void sendToService() {
+        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
+
+        mReceiver = new DownloadResultReceiver(new Handler());
+        mReceiver.setReceiver(this);
+        /* Send optional extras to Download IntentService */
+        intent.putExtra("receiver", this.mReceiver);
+        intent.putExtra("requestId", ServiceTest.START_UP);
+        intent.putExtra("bluetoothDevice", this.bluetoothDevice);
+        startService(intent);
     }
 
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
             case ServiceTest.STATUS_SENDING:
-                String[] results = resultData.getStringArray("result");
-                kmt = results[0];
-                Log.i("RECIVED", "Velocity : " + results[0] + "Total km : " + results[1]);
-                updateReadData();
+                Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
                 break;
             case ServiceTest.STATUS_ERROR:
                 String error = resultData.getString(Intent.EXTRA_TEXT);

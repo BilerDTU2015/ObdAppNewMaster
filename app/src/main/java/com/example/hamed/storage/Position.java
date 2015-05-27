@@ -1,4 +1,4 @@
-package com.example.hamed.maps;
+package com.example.hamed.storage;
 
 import android.os.Parcel;
 import android.os.Parcelable;

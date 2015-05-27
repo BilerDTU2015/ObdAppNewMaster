@@ -17,7 +17,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_marginTop="30dp" >
+        android:layout_marginTop="30dp"
+        android:id="@+id/linearLayout">
 
         <Button
             android:id="@+id/turnOn"
@@ -32,66 +33,20 @@
             android:text="@string/off" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:id="@+id/paired"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Set At Parameters"
-            android:id="@+id/setAtParameters" />
-
+            android:text="@string/List" />
 
 
     </LinearLayout>
 
 
     <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:layout_marginTop="80dp"
-        android:id="@+id/linearLayout">
-
-    <Button
-        android:id="@+id/paired"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/List" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Stop Data"
-        android:id="@+id/stopData" />
-
-    <Button
-        android:id="@+id/sendCommand"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Send"/>
-</LinearLayout>
-
-<LinearLayout
-
-android:layout_width="match_parent"
-android:layout_height="wrap_content"
-android:orientation="vertical"
-android:layout_marginTop="130dp" >
-
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="60dp"
-        android:text="OutPut"
-        android:id="@+id/live_data"
-        android:layout_below="@+id/linearLayout"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentEnd="true"
-        android:textColor="#ffffff" />
-
-</LinearLayout>
-
-    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:layout_marginTop="200dp" >
+        android:layout_below="@+id/linearLayout">
 
 
         <ListView
@@ -104,7 +59,8 @@ android:layout_marginTop="130dp" >
             android:cacheColorHint="@android:color/transparent"
             android:divider="#CCCCCC"
             android:dividerHeight="1dp"
-            android:paddingLeft="2dp">
+            android:paddingLeft="2dp"
+            android:textColor="#ffffff">
         </ListView>
 
     </LinearLayout>

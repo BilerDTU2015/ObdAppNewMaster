@@ -14,6 +14,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hamed.Service.DownloadResultReceiver;
+import com.example.hamed.Service.ServiceTest;
+
 
 public class LiveDataActivity extends Activity implements OnClickListener, DownloadResultReceiver.Receiver, OnItemSelectedListener {
 

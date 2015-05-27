@@ -55,11 +55,6 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
-            android:name=".TempActivity"
-            android:label="temperature"
-            android:parentActivityName=".MainActivity" >
-        </activity>
-        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
             <intent-filter>
@@ -90,7 +85,7 @@
         </activity>
 
         <service
-            android:name=".ServiceTest"
+            android:name="com.example.hamed.Service.ServiceTest"
             android:exported="false" />
 
         <activity
