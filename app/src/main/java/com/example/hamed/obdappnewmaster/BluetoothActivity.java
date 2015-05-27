@@ -224,7 +224,7 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
-            case ServiceTest.STATUS_SENDING:
+            case ServiceTest.STATUS_CONNECTED:
                 Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
                 break;
             case ServiceTest.STATUS_ERROR:

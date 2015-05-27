@@ -15,7 +15,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
     private ImageButton mBtnBluetooth;
     private ImageButton mBtnMap;
-    private ImageButton mBtnDashboard;
+    private ImageButton btn_load_data;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -27,6 +27,9 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
         mBtnMap = (ImageButton)findViewById(R.id.btn_map);
         mBtnMap.setOnClickListener(this);
+
+        btn_load_data = (ImageButton)findViewById(R.id.btn_load_data);
+        btn_load_data.setOnClickListener(this);
 
     }
 
@@ -42,6 +45,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_map:
                 intent = new Intent(con, MapsActivity.class);
                 break;
+            case R.id.btn_load_data:
+                intent = new Intent(con, LiveDataActivity.class);
         }
         startActivity(intent);
     }

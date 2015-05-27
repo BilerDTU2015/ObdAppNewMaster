@@ -103,17 +103,21 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
 
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
+        String result = "";
         switch (resultCode) {
             case ServiceTest.STATUS_SENDING:
-                String result = resultData.getString("result");
+                result = resultData.getString("result_1");
                 data = result;
                 Log.i("RECIVED", selected_text + " : " + result);
                 updateReadData();
                 break;
-            case ServiceTest.STATUS_SENDING_ARRAY:
-                String[] results = resultData.getStringArray("result");
-                data = results[0];
-                Log.i("RECIVED", selected_text + " : " + results[0] + "Total km : " + results[1]);
+            case ServiceTest.STATUS_SENDING_MULTI_DATA:
+                int data_size = resultData.getInt("data_size");
+                for (int i = 0; i <data_size; i++) {
+                    result = result + resultData.getString("result_" + (i + 1)) + "     ";
+                }
+                data = result;
+                Log.i("RECIVED", selected_text + " : " + result);
                 updateReadData();
                 break;
             case ServiceTest.STATUS_ERROR:
@@ -144,6 +148,30 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
                 break;
             case "Watt":
                 this.pid = "346";
+                break;
+            case "Vin":
+                this.pid = "6FA";
+                break;
+            case "Charging":
+                this.pid = "389";
+                break;
+            case "Quick Charging":
+                this.pid = "696";
+                break;
+            case "Gear Shift Position":
+                this.pid = "418";
+                break;
+            case "Air Condition":
+                this.pid = "3A4";
+                break;
+            case "Light Status":
+                this.pid = "424";
+                break;
+            case "Break Lamp":
+                this.pid = "231";
+                break;
+            case "All":
+                this.pid = "";
                 break;
         }
     }

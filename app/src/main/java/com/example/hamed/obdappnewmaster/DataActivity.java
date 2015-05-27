@@ -30,9 +30,9 @@ public class DataActivity extends Activity implements View.OnClickListener {
 
         text = (TextView) findViewById(R.id.txt_view_data);
 
-        mBtnShowMap = (Button)findViewById(R.id.btn_load_map);
+        mBtnShowMap = (Button) findViewById(R.id.btn_load_map);
         mBtnShowMap.setOnClickListener(this);
-        mBtnLoadData = (Button)findViewById(R.id.btn_load);
+        mBtnLoadData = (Button) findViewById(R.id.btn_load);
         mBtnLoadData.setOnClickListener(this);
 
     }
@@ -42,15 +42,15 @@ public class DataActivity extends Activity implements View.OnClickListener {
         super.onDestroy();
         //unregisterReceiver(bReceiver);
 
-        }
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_load:
-            ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
-            //text.setText(data);
-                for (Position pos : loadedPositions){
+                ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
+                //text.setText(data);
+                for (Position pos : loadedPositions) {
                     text.append(pos.toString());
                 }
                 break;
@@ -61,7 +61,7 @@ public class DataActivity extends Activity implements View.OnClickListener {
         }
     }
 
-    private void startMapActivity(){
+    private void startMapActivity() {
         ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
         String dummy = "wat";
 
