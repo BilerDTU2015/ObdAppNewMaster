@@ -46,14 +46,10 @@ public class DataController extends BroadcastReceiver implements MyResultReceive
         // Register this class as receiver programatically instead of in manifest
         mContext.registerReceiver(this, new IntentFilter(RECEIVE_RESULT));
 
-        // Clear data file
-        InternalStorage.clearFile(mContext);
-
-        recordingStatus = true;
-        //startLocationService();
     }
 
     public void startObdAndLocationLogging(){
+        InternalStorage.clearFile(mContext);
         startLocationService();
         startObdLogging();
     }

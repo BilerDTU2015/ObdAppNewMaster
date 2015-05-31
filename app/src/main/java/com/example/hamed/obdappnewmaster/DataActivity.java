@@ -4,6 +4,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.location.Location;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -14,6 +15,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.hamed.controller.DataController;
+import com.example.hamed.maps.MapColors;
 import com.example.hamed.maps.MapViewer;
 import com.example.hamed.storage.Position;
 import com.example.hamed.storage.InternalStorage;
@@ -42,13 +44,13 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
     private TextView text;
     private Button mBtnShowMap;
     private Button mBtnLoadData;
-    public ArrayList<Position> loadedPositions;
+    private ArrayList<Position> loadedPositions;
+    private ArrayList<Polyline> drawnLines;
 
     private GoogleMap mMap;
 
     private int minSpeed = 99999;
     private int maxSpeed = 0;
-    private int colorRange = 10;
     private int colorTock = 1;
 
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,10 +130,10 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
 //                    e.printStackTrace();
 //                }
 //                }
-                loadedPositions = InternalStorage.loadData(getApplicationContext());
+                loadData();
                 Log.d(TAG + " sizeLoad", String.valueOf(loadedPositions.size()));
                 setUpMap();
-                drawLines(loadedPositions);
+                drawLines();
 
              //  startMapActivity();
              //   setUpMapIfNeeded();
@@ -174,19 +176,6 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
 //        }
 //    }
 
-    private void startMapActivity() {
-        ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
-        String dummy = "wat";
-
-        final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
-        //settings.edit().putString(INTENT_MESSAGE, data).commit();
-
-        MapViewer mapViewer = new MapViewer();
-        Intent intent = new Intent(DataActivity.this, MapViewer.class);
-        //intent.putExtra(MESSAGE, loadedPositions); // dont send map data as intent but load it in mapViewer
-        startActivity(intent);
-    }
-
     private void setUpMapIfNeeded() {
         // Do a null check to confirm that we have not already instantiated the map.
         if (mMap == null) {
@@ -207,25 +196,34 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
      */
     private void setUpMap() {
         //mMap.addMarker(new MarkerOptions().position(DUBLIN).title("Marker"));
-        //Location location = mMap.getMyLocation();
-        //LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
-
+//        Location location = mMap.getMyLocation();
+//        LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
+        Log.d(TAG + " loadedLen ", String.valueOf(loadedPositions.size()));
         if (loadedPositions != null){
-            LatLng startPosition = loadedPositions.get(0).getLatLng();
+           LatLng startPosition = loadedPositions.get(0).getLatLng();
+            Log.d(TAG + " startpos ", startPosition.toString());
             mMap.addMarker(new MarkerOptions().position(startPosition).title("Start Point"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 20));
         }
 
-        mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+        mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
+//        mMap.addMarker(new MarkerOptions().position(currentLocation).title("You are here"));
+//        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15));
 
         // Show Zoom buttons
         mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 
-    private void drawLines(ArrayList<Position> positions) {
-        Log.d(TAG, "Drawing lines");
+    /**
+     * Requires that data has been loaded into local variable loadedPositions
+     */
+    private void drawLines() {
 
-        for (Position pos : positions) {
+        Log.d(TAG, "Drawing lines");
+        drawnLines = new ArrayList<>();
+
+        for (Position pos : loadedPositions) {
             int currentSpeed = pos.getSpeed();
 
             if (currentSpeed > maxSpeed) {
@@ -235,68 +233,37 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
                 minSpeed = currentSpeed;
             }
         }
-       // colorTock = (maxSpeed - minSpeed)/ colorRange;
+        // The colorTock is the interval between each color change
+       colorTock = (maxSpeed - minSpeed)/ MapColors.COLOR_RANGE;
+        Log.d(TAG, "tock " + String.valueOf(colorTock));
 
+        if (colorTock < 1)
+            colorTock++;
 
-        if (positions.size() >= 2) {
-            for (int i = 0; i < positions.size() - 1; i++) {
-                Position point1 = positions.get(i);
-                Position point2 = positions.get(i + 1);
-                drawPolyLine(point1, point2);
+        if (loadedPositions.size() >= 2) {
+            for (int i = 0; i < loadedPositions.size() - 1; i++) {
+                Position point1 = loadedPositions.get(i);
+                Position point2 = loadedPositions.get(i + 1);
+
+                int meanSpeed = (point2.getSpeed() + point1.getSpeed()) / 2;
+                int colorNumber = (meanSpeed-minSpeed) / colorTock;
+                int color = MapColors.generateColor(colorNumber);
+                drawPolyLine(point1, point2, color);
             }
         }
+        Log.d(TAG, "drawnSize " + String.valueOf(drawnLines.size()));
     }
 
-    private void drawPolyLine(Position start, Position end) {
-        int meanSpeed = (end.getSpeed() + start.getSpeed()) / 2;
-        // tock
-     //   int colorNumber = (meanSpeed-minSpeed) / colorTock;
-        int color = getResources().getColor(R.color.a);
-     //   Log.d("MapViewer", "choosing color " + String.valueOf(colorNumber));
-     //   int color = getColor(colorNumber);
-
+    private void drawPolyLine(Position start, Position end, int color) {
         Polyline line1 = mMap.addPolyline(new PolylineOptions()
                 .add(start.getLatLng(), end.getLatLng())
                 .width(6)
                 .color(color));
+        drawnLines.add(line1);
     }
 
-    private int getColor(int colorNumber) {
-        int color;
-        switch (colorNumber) {
-            default:
-            case 1:
-                color = getResources().getColor(R.color.a);
-                break;
-            case 2:
-                color = getResources().getColor(R.color.b);
-                break;
-            case 3:
-                color = getResources().getColor(R.color.c);
-                break;
-            case 4:
-                color = getResources().getColor(R.color.d);
-                break;
-            case 5:
-                color = getResources().getColor(R.color.e);
-                break;
-            case 6:
-                color = getResources().getColor(R.color.f);
-                break;
-            case 7:
-                color = getResources().getColor(R.color.g);
-                break;
-            case 8:
-                color = getResources().getColor(R.color.h);
-                break;
-            case 9:
-                color = getResources().getColor(R.color.i);
-                break;
-            case 10:
-                color = getResources().getColor(R.color.j);
-                break;
-        }
-        return color;
+    private void loadData() {
+        loadedPositions = InternalStorage.loadData(getApplicationContext());
     }
 
     class MyTask extends AsyncTask<Void, Void, Void>
