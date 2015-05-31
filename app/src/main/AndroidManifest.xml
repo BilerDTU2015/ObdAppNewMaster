@@ -72,6 +72,9 @@
         <service
             android:name="com.example.hamed.Service.NetworkService"
             android:exported="false" />
+        <service
+            android:name="com.example.hamed.Service.LocationService"
+            android:exported="false" />
 
         <activity
             android:name=".LiveDataActivity"

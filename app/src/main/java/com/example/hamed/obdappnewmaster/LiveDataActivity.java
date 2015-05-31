@@ -18,7 +18,7 @@ import com.example.hamed.Service.MyResultReceiver;
 import com.example.hamed.Service.NetworkService;
 
 
-public class LiveDataActivity extends Activity implements OnClickListener, MyResultReceiver.Receiver, OnItemSelectedListener {
+public class  LiveDataActivity extends Activity implements OnClickListener, MyResultReceiver.Receiver, OnItemSelectedListener {
 
     private Button stopBtn;
     private Button getDataBtn;

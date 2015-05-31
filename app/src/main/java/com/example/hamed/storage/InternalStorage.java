@@ -1,11 +1,14 @@
 package com.example.hamed.storage;
 
+import android.app.ProgressDialog;
 import android.content.Context;
+import android.os.Environment;
 import android.util.Log;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
@@ -21,6 +24,7 @@ import java.util.ArrayList;
 public class InternalStorage {
 
     public static final String FILE_NAME = "current_recording.txt";
+    public static final String TAG = "InternalStorage";
 
     /**
      *
@@ -34,7 +38,8 @@ public class InternalStorage {
         String latLng = positionParts[1];
         String speed = positionParts[2];
 
-        Log.d("InternalStorage latlnt", latLng);
+        Log.d(TAG, latLng);
+        Log.d(TAG + " speed ", speed);
 
         try {
             fos = con.openFileOutput(FILE_NAME, Context.MODE_APPEND);
@@ -47,6 +52,14 @@ public class InternalStorage {
             e.printStackTrace();
         } catch (IOException e) {
             Log.d("STORAGE", "IOError");
+            e.printStackTrace();
+        }
+    }
+
+    public static void clearFile(Context con){
+        try {
+            save("", FILE_NAME, con);
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -116,18 +129,23 @@ public class InternalStorage {
               if (data != null){
             String[] mapEntries = data.split(";");
             for (String str : mapEntries) {
+//                Log.d(TAG, "Full string : " + str);
+
                 String[] posAndSpeed = str.split("speed");
                 String lat = posAndSpeed[0].split(",")[0].split("\\(")[1];
                 String lng = posAndSpeed[0].split(",")[1].split("\\)")[0];
                 String speed = posAndSpeed[1].split(":")[1].substring(1);
 
-                Log.d("mark Lat", lat);
-                Log.d("mark Lng", lng);
-                Log.d("mark speed", speed);
+//                Log.d(TAG , lat);
+//                Log.d(TAG, lng);
+//                Log.d(TAG, speed);
 
-                LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
-                Position pos = new Position(latLng, Integer.valueOf(speed));
-                sanitizedData.add(pos);
+                // Crude hack to see if we have a bad location
+                if (!lat.equals(lng)){
+                    LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
+                    Position pos = new Position(latLng, Integer.valueOf(speed));
+                    sanitizedData.add(pos);
+                }
             }
         }
         return sanitizedData;

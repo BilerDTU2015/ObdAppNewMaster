@@ -56,7 +56,7 @@ public class DataHandler {
         String velocity = "";
         try {
             long hex_to_long_v = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
-            velocity = hex_to_long_v - 65024 + "km/t";
+            velocity = hex_to_long_v - 65024 + "";
         } catch (Exception e) {
             e.printStackTrace();
         }

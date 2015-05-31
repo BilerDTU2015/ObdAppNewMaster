@@ -23,6 +23,7 @@ public class Position {
         this.speed = speed;
     }
 
+
     public LatLng getLatLng(){
         return position;
     }

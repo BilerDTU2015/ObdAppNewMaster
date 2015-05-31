@@ -54,7 +54,6 @@ public class NetworkService extends IntentService {
                 Log.d(TAG, "Service Started!");
                 bluetoothDevice = intent.getParcelableExtra("bluetoothDevice");
                 connectToOBD(bluetoothDevice, receiver);
-                receiver.send(STATUS_CONNECTED, bundle);
                 break;
             case STOP:
                 try {
@@ -93,8 +92,10 @@ public class NetworkService extends IntentService {
                 this.socket.connect();
                 inputStream = this.socket.getInputStream();
                 outputStream = this.socket.getOutputStream();
+                receiver.send(STATUS_CONNECTED, bundle);
                 Log.d(TAG, "Connected to car");
             } catch (IOException e) {
+                this.socket = null; // be able to try again if first connect fails
                 Log.d(TAG, "Fail to connect to car");
                 bundle.putString(Intent.EXTRA_TEXT, e.toString());
                 receiver.send(STATUS_ERROR, bundle);

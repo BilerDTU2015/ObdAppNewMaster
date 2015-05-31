@@ -14,7 +14,7 @@
         android:id="@+id/btn_bluetooth"
         android:src="@drawable/rsz_bluetoothcon"
         android:layout_centerVertical="true"
-        android:layout_alignEnd="@+id/mySwitch" />
+        android:layout_alignEnd="@+id/record_switch" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -69,7 +69,7 @@
         android:maxHeight="200dp"
         android:switchMinWidth="100dp"
         android:minWidth="100dp"
-        android:id="@+id/mySwitch"
+        android:id="@+id/record_switch"
         android:layout_above="@+id/btn_bluetooth"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="59dp" />
@@ -78,12 +78,22 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="SpeedRecording"
-        android:id="@+id/switchStatus"
-        android:textColor="#fff8f4ff"
-        android:layout_above="@+id/mySwitch"
-        android:layout_alignParentStart="true" />
+        android:text="New Switch"
+        android:id="@+id/recording_textview"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="40dp"
+        android:layout_alignStart="@+id/btn_bluetooth"
+        android:layout_alignEnd="@+id/txt_data" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Press toggle button above to record data"
+        android:id="@+id/main_record_status_textview"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/record_switch"
+        android:layout_alignParentBottom="true"
+        android:textColor="#ffffffff" />
 
 
 </RelativeLayout>

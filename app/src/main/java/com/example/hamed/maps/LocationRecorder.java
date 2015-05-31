@@ -84,7 +84,6 @@ public class LocationRecorder extends FragmentActivity {
                     @Override
                     public void onMyLocationChange(Location arg0) {
                         LatLng currentLocation = new LatLng(arg0.getLatitude(), arg0.getLongitude());
-
                         Position position = new Position(currentLocation, generateRandomSpeed());
                         InternalStorage.appendToFile(position, context);
                     }
