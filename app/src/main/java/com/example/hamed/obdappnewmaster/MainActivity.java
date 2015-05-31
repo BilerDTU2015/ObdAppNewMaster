@@ -5,23 +5,23 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
+import android.widget.Spinner;
 import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.hamed.Service.MyResultReceiver;
-import com.example.hamed.Service.NetworkService;
 import com.example.hamed.storage.InternalStorage;
-import com.google.android.gms.maps.GoogleMap;
+
 
 import com.example.hamed.controller.DataController;
 
 
-public class MainActivity extends Activity implements View.OnClickListener {
+public class MainActivity extends Activity implements OnClickListener, OnItemSelectedListener {
 
     private boolean IS_RECORDING = false;
 
@@ -31,13 +31,14 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ImageButton mBtnMap;
     private ImageButton mBtnDashboard;
     private ImageButton mBtnLoadData;
+    private Spinner spinnerPid2;
+    private String selected_text;
+    private String pid;
 
     private DataController mDataController;
     private TextView switchStatus;
     private Switch mySwitch;
-    private GoogleMap map;
 
-    private MyResultReceiver obdReceiver;
 
 
     @Override
@@ -76,6 +77,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mBtnLoadData = (ImageButton)findViewById(R.id.btn_dashboard);
         mBtnLoadData.setOnClickListener(this);
 
+        // Start location data
+        mDataController = new DataController(getApplicationContext());
+
+        spinnerPid2 = (Spinner)findViewById(R.id.spinnerPid2);
+        spinnerPid2.setOnItemSelectedListener(this);
+
     }
 
     /**
@@ -83,8 +90,6 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * The file is emptied every time you toggle (ERASES PREVIOUS DATA)
      */
     public void startRecording(){
-        // Start location data
-        mDataController = new DataController(getApplicationContext());
        // mDataController.startLocationService();
         mDataController.startObdAndLocationLogging();
 
@@ -164,5 +169,28 @@ public class MainActivity extends Activity implements View.OnClickListener {
 
             }
         });
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        selected_text = spinnerPid2.getSelectedItem().toString();
+        setPid(selected_text);
+        mDataController.setPid(pid);
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        setPid("");
+    }
+
+    public void setPid(String pid) {
+        switch (pid) {
+            case "Velocity":
+                this.pid = "412";
+                break;
+            case "Watt":
+                this.pid = "346";
+                break;
+        }
     }
 }

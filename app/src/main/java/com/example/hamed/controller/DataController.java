@@ -36,7 +36,7 @@ public class DataController extends BroadcastReceiver implements MyResultReceive
     private final static String RECEIVE_RESULT = "com.example.hamed.service.RECEIVE_LOCATION";
 
     private MyResultReceiver obdReceiver;
-    private ResultReceiver resultReceiver;
+    private String pid;
 
     private String currentSpeed;
 
@@ -63,10 +63,13 @@ public class DataController extends BroadcastReceiver implements MyResultReceive
         Intent intent = new Intent(Intent.ACTION_SYNC, null, mContext, NetworkService.class);
         intent.putExtra("receiver", this.obdReceiver);
         intent.putExtra("requestId", NetworkService.SEND_COMMAND);
-        intent.putExtra("pid", "412"); // 412 = speed
+        intent.putExtra("pid", pid); // 412 = speed
         mContext.startService(intent);
     }
 
+    public void setPid(String pid){
+        this.pid = pid;
+    }
     public void startLocationService() {
         Intent intent = new Intent(Intent.ACTION_SYNC, null, mContext, LocationService.class);
 
