@@ -17,6 +17,13 @@
         <item>Velocity</item>
         <item>Power</item>
         <item>Watt</item>
+        <item>Vin</item>
+        <item>Charging</item>
+        <item>Quick Charging</item>
+        <item>Gear Shift Position</item>
+        <item>Air Condition</item>
+        <item>Light Status</item>
+        <item>Break Lamp</item>
     </string-array>
 
 </resources>

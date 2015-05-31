@@ -23,6 +23,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private Switch mySwitch;
     private GoogleMap map;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,10 +35,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mBtnMap = (ImageButton)findViewById(R.id.btn_map);
         mBtnMap.setOnClickListener(this);
 
+
+        mBtnDashboard = (ImageButton)findViewById(R.id.btn_dashboard);
+        mBtnDashboard.setOnClickListener(this);
+
         switchStatus = (TextView) findViewById(R.id.switchStatus);
         mySwitch = (Switch) findViewById(R.id.mySwitch);
         switchButton();
-
 
     }
 
@@ -54,10 +58,8 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent = new Intent(con, MapsActivity.class);
                 break;
             case R.id.btn_dashboard:
-                intent = new Intent(con, MapsActivity.class);
+                intent = new Intent(con, LiveDataActivity.class);
                 break;
-
-
 
         }
         startActivity(intent);

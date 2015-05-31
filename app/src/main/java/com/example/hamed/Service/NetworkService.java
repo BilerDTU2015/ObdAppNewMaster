@@ -15,11 +15,11 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ServiceTest extends IntentService {
+public class NetworkService extends IntentService {
 
     public static final int STATUS_ERROR = 0;
     public static final int STATUS_SENDING = 1;
-    public static final int STATUS_SENDING_ARRAY = 2;
+    public static final int STATUS_SENDING_MULTI_DATA = 2;
     public static final int STATUS_CONNECTED = 3;
     public static final int STOP = 0;
     public static final int START_UP = 1;
@@ -39,8 +39,8 @@ public class ServiceTest extends IntentService {
     private static OutputStream outputStream;
     private static BluetoothSocket socket;
 
-    public ServiceTest() {
-        super(ServiceTest.class.getName());
+    public NetworkService() {
+        super(NetworkService.class.getName());
     }
 
     @Override
@@ -122,6 +122,7 @@ public class ServiceTest extends IntentService {
         try {
             while (inputStream.available() > 0) {
                 int bytesRead = inputStream.read(buffer);
+                buffer = new byte[8192];
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -141,36 +142,85 @@ public class ServiceTest extends IntentService {
                 is_reading = true;
                 byte[] buffer = new byte[20];
                 DataHandler dataHandler = new DataHandler();
-                String[] tests;
-                String test;
-                String pid;
+                String data;
+                //String _pid; // used for more then one pid
                     while (is_reading) {
                         try {
+                            if (pid.equals("6FA")) {
+                                buffer = new byte[60];
+                            }
+                            if (pid.equals("418")){
+                                buffer = new byte[18];
+                            }
                             int bytesRead = inputStream.read(buffer);
+                            if(bytesRead == 18) {
+                                    data = dataHandler.gearShiftPositionRawToReal(buffer);
+                                    bundle.putString("result_1", data);
+                                    receiver.send(STATUS_SENDING, bundle);
+                            }
+
                             if (bytesRead == 20) {
-                                pid = new String(buffer, "ASCII").substring(0, 3);
+                                //_pid = new String(buffer, "ASCII").substring(0, 3); // used for more then one pid
                                 switch (pid){
-                                    case "412":
-                                        tests = dataHandler.velocityAndOdometerRawToReal(buffer);
-                                        bundle.putStringArray("result", tests);
-                                        receiver.send(STATUS_SENDING_ARRAY, bundle);
-                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", tests: km/t : " + tests[0] + " km : " + tests[1]);
+                                    case "374":
+                                        data = dataHandler.stateOfChargeRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        receiver.send(STATUS_SENDING, bundle);
                                         break;
                                     case "346":
-                                        test = dataHandler.evPowerRawToReal(buffer);
-                                        bundle.putString("result", test);
+                                        data = dataHandler.evPowerRawToReal(buffer);
+                                        bundle.putString("result_1", data);
                                         receiver.send(STATUS_SENDING, bundle);
-                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", W : " + test);
                                         break;
-                                    case "374":
-                                        test = dataHandler.stateOfChargeRawToReal(buffer);
-                                        bundle.putString("result", test);
+                                    case "412":
+                                        data = dataHandler.velocityRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        data = dataHandler.odometerRawToReal(buffer);
+                                        bundle.putString("result_2", data);
+                                        bundle.putInt("data_size", 2);
+                                        receiver.send(STATUS_SENDING_MULTI_DATA, bundle);
+                                        break;
+                                    case "389":
+                                        data = dataHandler.chargingRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        data = dataHandler.voltageRawToReal(buffer);
+                                        bundle.putString("result_2", data);
+                                        bundle.putInt("data_size", 2);
+                                        receiver.send(STATUS_SENDING_MULTI_DATA, bundle);
+                                        break;
+                                    case "696":
+                                        data = dataHandler.quickChargeStatusRawToReal(buffer);
+                                        bundle.putString("result_1", data);
                                         receiver.send(STATUS_SENDING, bundle);
-                                        Log.i("TAGGGGG", "byteCount: " + bytesRead + ", power : " + test);
+                                        break;
+                                    case "3A4":
+                                        data = dataHandler.airConditionRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        receiver.send(STATUS_SENDING, bundle);
+                                        break;
+                                    case "424":
+                                        data = dataHandler.frontLightRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        data = dataHandler.leftBlinkLightRawToReal(buffer);
+                                        bundle.putString("result_2", data);
+                                        data = dataHandler.rightBlinkLightRawToReal(buffer);
+                                        bundle.putString("result_3", data);
+                                        bundle.putInt("data_size", 3);
+                                        receiver.send(STATUS_SENDING_MULTI_DATA, bundle);
+                                        break;
+                                    case "231":
+                                        data = dataHandler.breakLampRawToReal(buffer);
+                                        bundle.putString("result_1", data);
+                                        receiver.send(STATUS_SENDING, bundle);
                                         break;
                                 }
+                                buffer = new byte[20];
                             }
-                            buffer = new byte[20];
+                            if (bytesRead == 60) {
+                                    data = dataHandler.vinRawToReal(buffer);
+                                    bundle.putString("result_1", data);
+                                    receiver.send(STATUS_SENDING, bundle);
+                            }
                         } catch (IOException e) {
                             e.printStackTrace();
                         }

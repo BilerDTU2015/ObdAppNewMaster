@@ -7,10 +7,10 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.ResultReceiver;
 
-public class DownloadResultReceiver extends ResultReceiver {
+public class MyResultReceiver extends ResultReceiver {
     private Receiver mReceiver;
 
-    public DownloadResultReceiver(Handler handler) {
+    public MyResultReceiver(Handler handler) {
         super(handler);
     }
 
