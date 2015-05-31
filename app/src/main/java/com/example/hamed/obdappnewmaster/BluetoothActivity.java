@@ -8,7 +8,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -18,13 +17,13 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hamed.Service.DownloadResultReceiver;
-import com.example.hamed.Service.ServiceTest;
+import com.example.hamed.Service.MyResultReceiver;
+import com.example.hamed.Service.NetworkService;
 
 import java.util.ArrayList;
 import java.util.Set;
 
-public class BluetoothActivity extends Activity implements OnClickListener,DownloadResultReceiver.Receiver {
+public class BluetoothActivity extends Activity implements OnClickListener,MyResultReceiver.Receiver {
 
     private static final int REQUEST_ENABLE_BT = 1;
 
@@ -35,7 +34,7 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     private BluetoothAdapter myBluetoothAdapter;
     private ListView myListView;
     private ArrayAdapter<String> BTArrayAdapter;
-    private DownloadResultReceiver mReceiver;
+    private MyResultReceiver mReceiver;
     private BluetoothDevice bluetoothDevice;
     private String mDeviceIdentifier;
 
@@ -210,13 +209,13 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     }
 
     public void sendToService() {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
+        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, NetworkService.class);
 
-        mReceiver = new DownloadResultReceiver(new Handler());
+        mReceiver = new MyResultReceiver(new Handler());
         mReceiver.setReceiver(this);
         /* Send optional extras to Download IntentService */
         intent.putExtra("receiver", this.mReceiver);
-        intent.putExtra("requestId", ServiceTest.START_UP);
+        intent.putExtra("requestId", NetworkService.START_UP);
         intent.putExtra("bluetoothDevice", this.bluetoothDevice);
         startService(intent);
     }
@@ -224,10 +223,10 @@ public class BluetoothActivity extends Activity implements OnClickListener,Downl
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
         switch (resultCode) {
-            case ServiceTest.STATUS_CONNECTED:
+            case NetworkService.STATUS_CONNECTED:
                 Toast.makeText(this, "Connected", Toast.LENGTH_LONG).show();
                 break;
-            case ServiceTest.STATUS_ERROR:
+            case NetworkService.STATUS_ERROR:
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 break;

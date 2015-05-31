@@ -70,7 +70,7 @@
         </activity>
 
         <service
-            android:name="com.example.hamed.Service.ServiceTest"
+            android:name="com.example.hamed.Service.NetworkService"
             android:exported="false" />
 
         <activity

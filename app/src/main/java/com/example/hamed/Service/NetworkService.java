@@ -15,7 +15,7 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.UUID;
 
-public class ServiceTest extends IntentService {
+public class NetworkService extends IntentService {
 
     public static final int STATUS_ERROR = 0;
     public static final int STATUS_SENDING = 1;
@@ -39,8 +39,8 @@ public class ServiceTest extends IntentService {
     private static OutputStream outputStream;
     private static BluetoothSocket socket;
 
-    public ServiceTest() {
-        super(ServiceTest.class.getName());
+    public NetworkService() {
+        super(NetworkService.class.getName());
     }
 
     @Override
@@ -122,6 +122,7 @@ public class ServiceTest extends IntentService {
         try {
             while (inputStream.available() > 0) {
                 int bytesRead = inputStream.read(buffer);
+                buffer = new byte[8192];
             }
         } catch (IOException e) {
             e.printStackTrace();
