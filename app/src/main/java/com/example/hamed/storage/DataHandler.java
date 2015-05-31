@@ -10,7 +10,7 @@ public class DataHandler {
     //PID 6FA vehicle identification number
     public String vinRawToReal(byte[] obd_data) {
         String vin = "";
-        String hex_from_buffer = "";
+        String hex_from_buffer;
         StringBuilder output = new StringBuilder();
         try {
             hex_from_buffer = new String(obd_data, "ASCII").substring(5,19) +
@@ -44,7 +44,7 @@ public class DataHandler {
         String ev_power = "";
         try {
             long hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
-            ev_power = (hex_to_long * 10) - 100000 + "W";
+            ev_power = (hex_to_long * 10) - 100000 + "";
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -218,10 +218,8 @@ public class DataHandler {
     public String breakLampRawToReal(byte[] obd_data) {
         String break_lamp = "Break light off";
         try {
-            String bin =  new BigInteger(new String(obd_data, "ASCII").substring(11, 13), 16).toString(2);
-            int temp = Integer.parseInt(bin);
-            bin = String.format("%08d", temp);
-            if(bin.substring(11,13).equals("02")) {
+            String hex = new String(obd_data, "ASCII").substring(11,13);
+            if(hex.equals("02")) {
                 break_lamp = "Break light on";
             }
         } catch (Exception e) {
