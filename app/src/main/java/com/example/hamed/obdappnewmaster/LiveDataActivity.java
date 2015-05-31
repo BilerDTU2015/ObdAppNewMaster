@@ -14,11 +14,11 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.hamed.Service.DownloadResultReceiver;
-import com.example.hamed.Service.ServiceTest;
+import com.example.hamed.Service.MyResultReceiver;
+import com.example.hamed.Service.NetworkService;
 
 
-public class LiveDataActivity extends Activity implements OnClickListener, DownloadResultReceiver.Receiver, OnItemSelectedListener {
+public class  LiveDataActivity extends Activity implements OnClickListener, MyResultReceiver.Receiver, OnItemSelectedListener {
 
     private Button stopBtn;
     private Button getDataBtn;
@@ -26,7 +26,7 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
 
     private String selected_text;
     private String pid;
-    private DownloadResultReceiver mReceiver;
+    private MyResultReceiver mReceiver;
     private TextView textViewOutput;
     private String data;
 
@@ -51,26 +51,26 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.stopBtn:
-                sendToService(ServiceTest.STOP);
+                sendToService(NetworkService.STOP);
                 break;
             case R.id.getDataBtn:
-                sendToService(ServiceTest.SEND_COMMAND);
+                sendToService(NetworkService.SEND_COMMAND);
                 break;
         }
     }
 
     public void sendToService(int requestId) {
-        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, ServiceTest.class);
+        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, NetworkService.class);
 
-        mReceiver = new DownloadResultReceiver(new Handler());
+        mReceiver = new MyResultReceiver(new Handler());
         mReceiver.setReceiver(this);
         /* Send optional extras to Download IntentService */
         intent.putExtra("receiver", this.mReceiver);
         switch (requestId){
-            case ServiceTest.STOP:
+            case NetworkService.STOP:
                 intent.putExtra("requestId", requestId);
                 break;
-            case ServiceTest.SEND_COMMAND:
+            case NetworkService.SEND_COMMAND:
                 intent.putExtra("requestId", requestId);
                 intent.putExtra("pid", this.pid);
                 break;
@@ -103,20 +103,24 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
 
     @Override
     public void onReceiveResult(int resultCode, Bundle resultData) {
+        String result = "";
         switch (resultCode) {
-            case ServiceTest.STATUS_SENDING:
-                String result = resultData.getString("result");
+            case NetworkService.STATUS_SENDING:
+                result = resultData.getString("result_1");
                 data = result;
                 Log.i("RECIVED", selected_text + " : " + result);
                 updateReadData();
                 break;
-            case ServiceTest.STATUS_SENDING_ARRAY:
-                String[] results = resultData.getStringArray("result");
-                data = results[0];
-                Log.i("RECIVED", selected_text + " : " + results[0] + "Total km : " + results[1]);
+            case NetworkService.STATUS_SENDING_MULTI_DATA:
+                int data_size = resultData.getInt("data_size");
+                for (int i = 0; i <data_size; i++) {
+                    result = result + resultData.getString("result_" + (i + 1)) + "     ";
+                }
+                data = result;
+                Log.i("RECIVED", selected_text + " : " + result);
                 updateReadData();
                 break;
-            case ServiceTest.STATUS_ERROR:
+            case NetworkService.STATUS_ERROR:
                 String error = resultData.getString(Intent.EXTRA_TEXT);
                 Toast.makeText(this, error, Toast.LENGTH_LONG).show();
                 break;
@@ -144,6 +148,30 @@ public class LiveDataActivity extends Activity implements OnClickListener, Downl
                 break;
             case "Watt":
                 this.pid = "346";
+                break;
+            case "Vin":
+                this.pid = "6FA";
+                break;
+            case "Charging":
+                this.pid = "389";
+                break;
+            case "Quick Charging":
+                this.pid = "696";
+                break;
+            case "Gear Shift Position":
+                this.pid = "418";
+                break;
+            case "Air Condition":
+                this.pid = "3A4";
+                break;
+            case "Light Status":
+                this.pid = "424";
+                break;
+            case "Break Lamp":
+                this.pid = "231";
+                break;
+            case "All":
+                this.pid = "";
                 break;
         }
     }

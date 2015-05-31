@@ -33,14 +33,6 @@ public class MapsActivity extends FragmentActivity {
 
     private GoogleMap mMap; // Might be null if Google Play services APK is not available.
 
-    // Stuff from polyline tutorial
-    ProgressDialog pDialog;
-    List<LatLng> polyz;
-    JSONArray array;
-    static final LatLng DUBLIN = new LatLng(53.344103999999990000, -6.267493699999932000);
-
-    InternalStorage storage = new InternalStorage();
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
        super.onCreate(savedInstanceState);

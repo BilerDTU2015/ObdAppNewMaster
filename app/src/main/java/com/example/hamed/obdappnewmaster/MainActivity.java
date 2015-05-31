@@ -3,9 +3,9 @@ package com.example.hamed.obdappnewmaster;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.os.Handler;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -13,10 +13,17 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.hamed.Service.MyResultReceiver;
+import com.example.hamed.Service.NetworkService;
+import com.example.hamed.storage.InternalStorage;
+import com.google.android.gms.maps.GoogleMap;
+
 import com.example.hamed.controller.DataController;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
+
+    private boolean IS_RECORDING = false;
 
     private TextView mSwitchStatus;
     private Switch mSwitch;
@@ -26,6 +33,12 @@ public class MainActivity extends Activity implements View.OnClickListener {
     private ImageButton mBtnLoadData;
 
     private DataController mDataController;
+    private TextView switchStatus;
+    private Switch mySwitch;
+    private GoogleMap map;
+
+    private MyResultReceiver obdReceiver;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,7 +73,7 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mBtnMap = (ImageButton)findViewById(R.id.btn_map);
         mBtnMap.setOnClickListener(this);
 
-        mBtnLoadData = (ImageButton)findViewById(R.id.btn_load_data);
+        mBtnLoadData = (ImageButton)findViewById(R.id.btn_dashboard);
         mBtnLoadData.setOnClickListener(this);
 
     }
@@ -70,16 +83,33 @@ public class MainActivity extends Activity implements View.OnClickListener {
      * The file is emptied every time you toggle (ERASES PREVIOUS DATA)
      */
     public void startRecording(){
+        // Start location data
         mDataController = new DataController(getApplicationContext());
-        mDataController.startLocationService();
+       // mDataController.startLocationService();
+        mDataController.startObdAndLocationLogging();
+
+//        // Start obd data
+//        Intent intent = new Intent(Intent.ACTION_SYNC, null, this, NetworkService.class);
+//        obdReceiver = new MyResultReceiver(new Handler());
+//        obdReceiver.setReceiver(this);
+//        startService(intent);
     }
 
     /**
      * Method to stop data logging
      */
     public void stopRecording(){
+        // Stop location service
         if (mDataController != null)
             mDataController.stopRecording();
+
+        mBtnDashboard = (ImageButton)findViewById(R.id.btn_dashboard);
+        mBtnDashboard.setOnClickListener(this);
+
+        switchStatus = (TextView) findViewById(R.id.main_record_status_textview);
+        mySwitch = (Switch) findViewById(R.id.record_switch);
+        switchButton();
+
     }
 
     @Override
@@ -92,12 +122,47 @@ public class MainActivity extends Activity implements View.OnClickListener {
                 intent = new Intent(con, BluetoothActivity.class);
                 break;
             case R.id.btn_map:
-                intent = new Intent(con, MapsActivity.class);
-                break;
-            case R.id.btn_load_data:
                 intent = new Intent(con, DataActivity.class);
+                break;
+            case R.id.btn_load:
+                intent = new Intent(con, DataActivity.class);
+                break;
+            case R.id.btn_dashboard:
+                intent = new Intent(con, LiveDataActivity.class);
                 break;
         }
         startActivity(intent);
+    }
+
+
+    public void switchButton(){
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+
+                if(isChecked){
+                    IS_RECORDING = true;
+                    startRecording();
+                    // flush data file
+                    InternalStorage.clearFile(getApplicationContext());
+
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+                    editor.commit();
+                    editor.putBoolean("NameOfThingToSave", true);
+                    switchStatus.setText("SpeedRecording is currently ON");
+
+                }else{
+                    IS_RECORDING = false;
+                    stopRecording();
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+                    editor.commit();
+                    editor.putBoolean("NameOfThingToSavea", false);
+                    switchStatus.setText("SpeedRecording is currently OFF");
+                }
+
+            }
+        });
     }
 }

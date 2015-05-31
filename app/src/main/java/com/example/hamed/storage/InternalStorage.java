@@ -38,7 +38,8 @@ public class InternalStorage {
         String latLng = positionParts[1];
         String speed = positionParts[2];
 
-        Log.d("InternalStorage latlnt", latLng);
+        Log.d(TAG, latLng);
+        Log.d(TAG + " speed ", speed);
 
         try {
             fos = con.openFileOutput(FILE_NAME, Context.MODE_APPEND);
@@ -57,7 +58,7 @@ public class InternalStorage {
 
     public static void clearFile(Context con){
         try {
-            save(null, FILE_NAME, con);
+            save("", FILE_NAME, con);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -139,9 +140,12 @@ public class InternalStorage {
 //                Log.d(TAG, lng);
 //                Log.d(TAG, speed);
 
-                LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
-                Position pos = new Position(latLng, Integer.valueOf(speed));
-                sanitizedData.add(pos);
+                // Crude hack to see if we have a bad location
+                if (!lat.equals(lng)){
+                    LatLng latLng = new LatLng(Float.parseFloat(lat), Float.parseFloat(lng));
+                    Position pos = new Position(latLng, Integer.valueOf(speed));
+                    sanitizedData.add(pos);
+                }
             }
         }
         return sanitizedData;

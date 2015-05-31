@@ -57,14 +57,13 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
 
         text = (TextView) findViewById(R.id.txt_view_data);
 
-        mBtnShowMap = (Button)findViewById(R.id.btn_load_map);
+        mBtnShowMap = (Button) findViewById(R.id.btn_load_map);
         mBtnShowMap.setOnClickListener(this);
-        mBtnLoadData = (Button)findViewById(R.id.btn_load);
+        mBtnLoadData = (Button) findViewById(R.id.btn_load);
         mBtnLoadData.setOnClickListener(this);
 
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
-
     }
 
     protected void onDestroy() {
@@ -72,15 +71,15 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
         super.onDestroy();
         //unregisterReceiver(bReceiver);
 
-        }
+    }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_load:
-            ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
-            //text.setText(data);
-                for (Position pos : loadedPositions){
+                ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
+                //text.setText(data);
+                for (Position pos : loadedPositions) {
                     text.append(pos.toString());
                 }
                 break;
@@ -88,13 +87,15 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
                 isLoading = true;
                 loadedPositions = new ArrayList<>();
 
-                progress = new ProgressDialog(DataActivity.this, R.style.MyTheme);
+                Log.d(TAG, "creating spinning wheel");
+
+//                progress = new ProgressDialog(DataActivity.this, R.style.MyTheme);
 //               progress = (ProgressBar) findViewById(R.id.progressBar);
 
 //                progress.setProgress(0);
-                progress.setCancelable(false);
+//                progress.setCancelable(false);
 //                progress.setMessage("Loading location data");
-                progress.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
+//                progress.setProgressStyle(android.R.style.Widget_ProgressBar_Small);
 //                progress.setIndeterminate(false);
 //                progress.setProgress(0);
 //                progress.setMax(100);
@@ -104,33 +105,34 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
 //                progress.setMax(100);
 //                progress.setIndeterminate(false);
 //                progress.setVisibility(View.VISIBLE);
-                progress.show();
+//                progress.show();
                 // Start lengthy operation in a background thread
-
-                new Thread(new Runnable() {
-                    public void run() {
-                        progress.show();
-                        ArrayList<Position> moarPositions = InternalStorage.loadData(getApplicationContext());
-                        setPositions(moarPositions);
-                        progress.dismiss();
-                        isLoading = false;
-                       setUpMapIfNeeded();
-                       // drawLines(moarPositions);
-                    }
-                }).start();
-
-                // Wait for thread to stop loading from file
-//            while(isLoading){
-//                try {
+//                Thread t = new Thread(new Runnable() {
+//                    public void run() {
+//                        progress.show();
+//                        ArrayList<Position> moarPositions = InternalStorage.loadData(getApplicationContext());
+//                        Log.d(TAG, "loaded size : " + String.valueOf(moarPositions.size()));
+//                        setPositions(moarPositions);
+//                        progress.dismiss();
+//                        isLoading = false;
+//                       setUpMapIfNeeded();
+//                      // drawLines(moarPositions);
+//                    }
+//                });
+//
+//                t.start();
+//                while (t.isAlive()){
+//                    try {
 //                    Thread.sleep(200);
 //                } catch (InterruptedException e) {
 //                    e.printStackTrace();
 //                }
-//            }
-
-            if (loadedPositions.size() > 0) {
+//                }
+                loadedPositions = InternalStorage.loadData(getApplicationContext());
+                Log.d(TAG + " sizeLoad", String.valueOf(loadedPositions.size()));
+                setUpMap();
                 drawLines(loadedPositions);
-            }
+
              //  startMapActivity();
              //   setUpMapIfNeeded();
 
@@ -172,7 +174,7 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
 //        }
 //    }
 
-    private void startMapActivity(){
+    private void startMapActivity() {
         ArrayList<Position> loadedPositions = InternalStorage.loadData(getApplicationContext());
         String dummy = "wat";
 
@@ -209,7 +211,6 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
         //LatLng currentLocation = new LatLng(location.getLatitude(), location.getLongitude());
 
         if (loadedPositions != null){
-            Log.d(TAG, "positions not null");
             LatLng startPosition = loadedPositions.get(0).getLatLng();
             mMap.addMarker(new MarkerOptions().position(startPosition).title("Start Point"));
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startPosition, 20));
@@ -222,7 +223,7 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
     }
 
     private void drawLines(ArrayList<Position> positions) {
-        Log.d("MapViewer", "Drawing lines");
+        Log.d(TAG, "Drawing lines");
 
         for (Position pos : positions) {
             int currentSpeed = pos.getSpeed();
@@ -234,7 +235,7 @@ public class DataActivity extends FragmentActivity implements View.OnClickListen
                 minSpeed = currentSpeed;
             }
         }
-        colorTock = (maxSpeed - minSpeed)/ colorRange;
+       // colorTock = (maxSpeed - minSpeed)/ colorRange;
 
 
         if (positions.size() >= 2) {
