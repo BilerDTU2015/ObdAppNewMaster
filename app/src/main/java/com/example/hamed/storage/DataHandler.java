@@ -44,7 +44,7 @@ public class DataHandler {
         String ev_power = "";
         try {
             long hex_to_long = Long.parseLong(new String(obd_data, "ASCII").substring(3,7), 16);
-            ev_power = (hex_to_long * 10) - 100000 + "W";
+            ev_power = (hex_to_long * 10) - 100000 + "";
         } catch (Exception e) {
             e.printStackTrace();
         }

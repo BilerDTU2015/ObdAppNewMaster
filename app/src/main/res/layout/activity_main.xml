@@ -13,7 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_bluetooth"
         android:src="@drawable/rsz_bluetoothcon"
-        android:layout_centerVertical="true"
+        android:layout_marginBottom="52dp"
+        android:layout_alignParentBottom="true"
         android:layout_alignEnd="@+id/record_switch" />
 
     <TextView
@@ -23,8 +24,8 @@
         android:text="  Bluetooth"
         android:id="@+id/textView"
         android:textColor="#fffffcfe"
-        android:layout_below="@+id/btn_bluetooth"
-        android:layout_alignStart="@+id/btn_bluetooth" />
+        android:layout_alignStart="@+id/btn_bluetooth"
+        android:layout_alignTop="@+id/textView5" />
 
     <ImageButton
         android:layout_width="wrap_content"
@@ -70,9 +71,9 @@
         android:switchMinWidth="100dp"
         android:minWidth="100dp"
         android:id="@+id/record_switch"
-        android:layout_above="@+id/btn_bluetooth"
+        android:layout_below="@+id/recording_textview"
         android:layout_alignParentStart="true"
-        android:layout_marginBottom="59dp" />
+        android:layout_marginTop="51dp" />
 
 
     <TextView
@@ -91,9 +92,19 @@
         android:text="Press toggle button above to record data"
         android:id="@+id/main_record_status_textview"
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:layout_below="@+id/record_switch"
-        android:layout_alignParentBottom="true"
-        android:textColor="#ffffffff" />
+        android:textColor="#ffffffff"
+        android:layout_alignBottom="@+id/record_switch"
+        android:layout_alignEnd="@+id/recording_textview" />
+
+    <Spinner
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/spinnerPid2"
+        android:layout_below="@+id/main_record_status_textview"
+        android:entries="@array/pid2"
+        android:prompt="@string/pid2_prompt"
+        android:layout_centerHorizontal="true"
+        android:layout_weight="1"/>
 
 
 </RelativeLayout>
