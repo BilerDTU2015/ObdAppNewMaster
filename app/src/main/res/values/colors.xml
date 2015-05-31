@@ -10,4 +10,6 @@
     <color name="h">#ffffa834</color>
     <color name="i">#ffff5707</color>
     <color name="j">#ffe80c00</color>
+
+    <color name="transparent">#00000000</color>
 </resources>

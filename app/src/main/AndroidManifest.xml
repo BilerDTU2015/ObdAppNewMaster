@@ -40,21 +40,6 @@
             android:parentActivityName=".MainActivity" >
         </activity>
         <activity
-            android:name=".CarPower"
-            android:label="fuel_electricity"
-            android:parentActivityName=".MainActivity" >
-        </activity>
-        <activity
-            android:name=".SpeedActivity"
-            android:label="speed_velocity"
-            android:parentActivityName=".MainActivity" >
-        </activity>
-        <activity
-            android:name=".SupportActivity"
-            android:label="supporting"
-            android:parentActivityName=".MainActivity" >
-        </activity>
-        <activity
             android:name=".MapsActivity"
             android:label="@string/title_activity_maps" >
             <intent-filter>
@@ -86,6 +71,12 @@
 
         <service
             android:name="com.example.hamed.Service.ServiceTest"
+            android:exported="false" />
+        <service
+            android:name="com.example.hamed.Service.LocationService_old"
+            android:exported="false" />
+        <service
+            android:name="com.example.hamed.Service.LocationService"
             android:exported="false" />
 
         <activity

@@ -69,11 +69,21 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="New Switch"
-        android:id="@+id/switch1"
+        android:id="@+id/record_switch"
         android:layout_alignParentTop="true"
         android:layout_marginTop="40dp"
         android:layout_alignStart="@+id/btn_bluetooth"
         android:layout_alignEnd="@+id/txt_data" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Press toggle button above to record data"
+        android:id="@+id/main_record_status_textview"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:layout_below="@+id/record_switch"
+        android:layout_alignParentBottom="true"
+        android:textColor="#ffffffff" />
 
 
 </RelativeLayout>

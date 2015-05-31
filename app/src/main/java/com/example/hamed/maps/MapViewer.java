@@ -32,14 +32,14 @@ public class MapViewer extends FragmentActivity {
     private int minSpeed = 99999;
     private int maxSpeed = 0;
     private int colorRange = 10;
-    private int colorTock = 0;
+    private int colorTock = 1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_maps);
 
-        loadMapData();
+       loadMapData();
         setUpMapIfNeeded();
         drawLines(positions);
         //final SharedPreferences settings = PreferenceManager.getDefaultSharedPreferences(this);
