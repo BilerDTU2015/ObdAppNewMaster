@@ -13,10 +13,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/btn_bluetooth"
         android:src="@drawable/rsz_bluetoothcon"
-        android:layout_marginTop="123dp"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="41dp" />
+        android:layout_centerVertical="true"
+        android:layout_alignEnd="@+id/mySwitch" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -49,8 +47,8 @@
     <ImageButton
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/btn_load_data"
-        android:src="@drawable/rszmail"
+        android:id="@+id/btn_dashboard"
+        android:src="@drawable/rsz_speed"
         android:layout_alignTop="@+id/btn_map"
         android:layout_alignParentEnd="true"
         android:layout_marginEnd="39dp" />
@@ -59,21 +57,33 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text=" Load data"
+        android:text="Dashboard"
         android:id="@+id/txt_data"
-        android:layout_below="@+id/btn_load_data"
-        android:layout_alignStart="@+id/btn_load_data"
+        android:layout_below="@+id/btn_dashboard"
+        android:layout_alignStart="@+id/btn_dashboard"
         android:textColor="#ffffffff" />
 
     <Switch
+        android:layout_width="113dp"
+        android:layout_height="100dp"
+        android:maxHeight="200dp"
+        android:switchMinWidth="100dp"
+        android:minWidth="100dp"
+        android:id="@+id/mySwitch"
+        android:layout_above="@+id/btn_bluetooth"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="59dp" />
+
+
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Switch"
-        android:id="@+id/switch1"
-        android:layout_alignParentTop="true"
-        android:layout_marginTop="40dp"
-        android:layout_alignStart="@+id/btn_bluetooth"
-        android:layout_alignEnd="@+id/txt_data" />
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="SpeedRecording"
+        android:id="@+id/switchStatus"
+        android:textColor="#fff8f4ff"
+        android:layout_above="@+id/mySwitch"
+        android:layout_alignParentStart="true" />
 
 
 </RelativeLayout>

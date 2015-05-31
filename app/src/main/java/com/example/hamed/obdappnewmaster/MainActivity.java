@@ -3,19 +3,26 @@ package com.example.hamed.obdappnewmaster;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.ImageButton;
-import android.widget.Toast;
+import android.widget.Switch;
+import android.widget.TextView;
+
+import com.google.android.gms.maps.GoogleMap;
 
 
 public class MainActivity extends Activity implements View.OnClickListener {
 
     private ImageButton mBtnBluetooth;
     private ImageButton mBtnMap;
-    private ImageButton btn_load_data;
+    private ImageButton mBtnDashboard;
+    private TextView switchStatus;
+    private Switch mySwitch;
+    private GoogleMap map;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,8 +35,13 @@ public class MainActivity extends Activity implements View.OnClickListener {
         mBtnMap = (ImageButton)findViewById(R.id.btn_map);
         mBtnMap.setOnClickListener(this);
 
-        btn_load_data = (ImageButton)findViewById(R.id.btn_load_data);
-        btn_load_data.setOnClickListener(this);
+
+        mBtnDashboard = (ImageButton)findViewById(R.id.btn_dashboard);
+        mBtnDashboard.setOnClickListener(this);
+
+        switchStatus = (TextView) findViewById(R.id.switchStatus);
+        mySwitch = (Switch) findViewById(R.id.mySwitch);
+        switchButton();
 
     }
 
@@ -45,9 +57,53 @@ public class MainActivity extends Activity implements View.OnClickListener {
             case R.id.btn_map:
                 intent = new Intent(con, MapsActivity.class);
                 break;
-            case R.id.btn_load_data:
+            case R.id.btn_dashboard:
                 intent = new Intent(con, LiveDataActivity.class);
+                break;
+
         }
         startActivity(intent);
     }
+
+
+    public void switchButton(){
+
+        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+
+                if(isChecked){
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+                    editor.commit();
+                    editor.putBoolean("NameOfThingToSave", true);
+                    switchStatus.setText("SpeedRecording is currently ON");
+
+                }else{
+
+                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+                    editor.commit();
+                    editor.putBoolean("NameOfThingToSavea", false);
+                    switchStatus.setText("SpeedRecording is currently OFF");
+                }
+
+            }
+        });
+
+        if(mySwitch.isChecked()){
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+            editor.commit();
+            switchStatus.setText("SpeedRecording is currently ON");
+        }
+        else {
+            SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+            editor.commit();
+            switchStatus.setText("SpeedRecording is currently OFF");
+        }
+
+
+
+    }
+
+
 }
