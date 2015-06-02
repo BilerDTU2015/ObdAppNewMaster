@@ -28,6 +28,7 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
     private TextView mSwitchStatus;
     private Switch mSwitch;
+    private ImageButton mBtnStartRecording;
     private ImageButton mBtnBluetooth;
     private ImageButton mBtnMap;
     private ImageButton mBtnDashboard;
@@ -47,27 +48,30 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        mSwitchStatus = (TextView) findViewById(R.id.main_record_status_textview);
-        mSwitch = (Switch) findViewById(R.id.record_switch);
+//        mSwitchStatus = (TextView) findViewById(R.id.main_record_status_textview);
+//        mSwitch = (Switch) findViewById(R.id.record_switch);
+//
+//        //set the switch to ON
+//        mSwitch.setChecked(false);
+//        //attach a listener to check for changes in state
+//        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView,
+//                                         boolean isChecked) {
+//
+//                if (isChecked) {
+//                    mSwitchStatus.setText("Data recording ON");
+//                    startRecording();
+//                } else {
+//                    mSwitchStatus.setText("Data recording OFF");
+//                    stopRecording();
+//                }
+//            }
+//        });
 
-        //set the switch to ON
-        mSwitch.setChecked(false);
-        //attach a listener to check for changes in state
-        mSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,
-                                         boolean isChecked) {
-
-                if (isChecked) {
-                    mSwitchStatus.setText("Data recording ON");
-                    startRecording();
-                } else {
-                    mSwitchStatus.setText("Data recording OFF");
-                    stopRecording();
-                }
-            }
-        });
+        mBtnStartRecording = (ImageButton)findViewById(R.id.btn_start_recording);
+        mBtnStartRecording.setOnClickListener(this);
 
         mBtnBluetooth = (ImageButton)findViewById(R.id.btn_bluetooth);
         mBtnBluetooth.setOnClickListener(this);
@@ -78,6 +82,8 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         mBtnLoadData = (ImageButton)findViewById(R.id.btn_dashboard);
         mBtnLoadData.setOnClickListener(this);
 
+        mBtnDashboard = (ImageButton)findViewById(R.id.btn_dashboard);
+        mBtnDashboard.setOnClickListener(this);
         // Start location data
         mDataController = new DataController(getApplicationContext());
 
@@ -112,12 +118,9 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         if (mDataController != null)
             mDataController.stopRecording();
 
-        mBtnDashboard = (ImageButton)findViewById(R.id.btn_dashboard);
-        mBtnDashboard.setOnClickListener(this);
-
-        switchStatus = (TextView) findViewById(R.id.main_record_status_textview);
-        mySwitch = (Switch) findViewById(R.id.record_switch);
-        switchButton();
+//        switchStatus = (TextView) findViewById(R.id.main_record_status_textview);
+//        mySwitch = (Switch) findViewById(R.id.record_switch);
+        //switchButton();
 
     }
 
@@ -127,53 +130,67 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
         Intent intent = null;
 
         switch (view.getId()) {
+            case R.id.btn_start_recording:
+                if(IS_RECORDING){
+                    IS_RECORDING = false;
+                    mBtnStartRecording.setImageResource(R.drawable.rsz_car_white);
+                    stopRecording();
+                } else {
+                    IS_RECORDING = true;
+                    mBtnStartRecording.setImageResource(R.drawable.rsz_car_red);
+                    startRecording();
+                }
+                break;
             case R.id.btn_bluetooth:
                 intent = new Intent(con, BluetoothActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_map:
                 intent = new Intent(con, DataActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_load:
                 intent = new Intent(con, DataActivity.class);
+                startActivity(intent);
                 break;
             case R.id.btn_dashboard:
                 intent = new Intent(con, LiveDataActivity.class);
+                startActivity(intent);
                 break;
         }
-        startActivity(intent);
     }
 
 
-    public void switchButton(){
-
-        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
-
-                if(isChecked){
-                    IS_RECORDING = true;
-                    startRecording();
-                    // flush data file
-                    InternalStorage.clearFile(getApplicationContext());
-
-                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
-                    editor.commit();
-                    editor.putBoolean("NameOfThingToSave", true);
-                    switchStatus.setText("SpeedRecording is currently ON");
-
-                }else{
-                    IS_RECORDING = false;
-                    stopRecording();
-                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
-                    editor.commit();
-                    editor.putBoolean("NameOfThingToSavea", false);
-                    switchStatus.setText("SpeedRecording is currently OFF");
-                }
-
-            }
-        });
-    }
+//    public void switchButton(){
+//
+//        mySwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+//
+//            @Override
+//            public void onCheckedChanged(CompoundButton buttonView,boolean isChecked) {
+//
+//                if(isChecked){
+//                    IS_RECORDING = true;
+//                    startRecording();
+//                    // flush data file
+//                    InternalStorage.clearFile(getApplicationContext());
+//
+//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+//                    editor.commit();
+//                    editor.putBoolean("NameOfThingToSave", true);
+//                    switchStatus.setText("SpeedRecording is currently ON");
+//
+//                }else{
+//                    IS_RECORDING = false;
+//                    stopRecording();
+//                    SharedPreferences.Editor editor = getSharedPreferences("com.example.xyz", MODE_PRIVATE).edit();
+//                    editor.commit();
+//                    editor.putBoolean("NameOfThingToSavea", false);
+//                    switchStatus.setText("SpeedRecording is currently OFF");
+//                }
+//
+//            }
+//        });
+//    }
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {

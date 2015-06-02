@@ -51,7 +51,7 @@ public class DataController extends BroadcastReceiver implements MyResultReceive
     public void startObdAndLocationLogging(){
         InternalStorage.clearFile(mContext);
         startLocationService();
-        startObdLogging();
+      //  startObdLogging();
     }
 
     /**
