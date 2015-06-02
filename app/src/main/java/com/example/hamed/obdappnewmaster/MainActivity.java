@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.Spinner;
@@ -88,6 +89,9 @@ public class MainActivity extends Activity implements OnClickListener, OnItemSel
 
         spinnerPid2 = (Spinner)findViewById(R.id.spinnerPid2);
         spinnerPid2.setOnItemSelectedListener(this);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_textview, getResources().getStringArray(R.array.pid2));
+        spinnerPid2.setAdapter(adapter);
 
     }
 
