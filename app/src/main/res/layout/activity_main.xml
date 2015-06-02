@@ -104,6 +104,7 @@
         android:entries="@array/pid2"
         android:prompt="@string/pid2_prompt"
         android:layout_centerHorizontal="true"
+        android:popupBackground="@android:color/transparent"
         android:layout_weight="1"/>
 
 

@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemSelectedListener;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -45,6 +46,8 @@ public class  LiveDataActivity extends Activity implements OnClickListener, MyRe
 
         spinnerPid = (Spinner)findViewById(R.id.spinnerPid);
         spinnerPid.setOnItemSelectedListener(this);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, R.layout.spinner_textview, getResources().getStringArray(R.array.pid));
+        spinnerPid.setAdapter(adapter);
     }
 
     @Override

@@ -29,6 +29,7 @@
             android:id="@+id/spinnerPid"
             android:entries="@array/pid"
             android:prompt="@string/pid_prompt"
+            android:popupBackground="@android:color/transparent"
             android:layout_weight="1" />
 
     </LinearLayout>

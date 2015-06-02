@@ -195,7 +195,9 @@ public class BluetoothActivity extends Activity implements OnClickListener,MyRes
                 // Add the name and address to an array adapter to show in a ListView
                 deviceInfos.add(device.getName() + "\n" + device.getAddress());
             }
-            myListView.setAdapter(createAdapter(deviceInfos));
+            ArrayAdapter<String> ad = new ArrayAdapter<String>(this,R.layout.textview_text,deviceInfos);
+
+            myListView.setAdapter(ad);
         }
     }
 
